@@ -1,14 +1,14 @@
 package com.estaine.elo.controller;
 
+import com.estaine.elo.format.GroupStatsFormatter;
 import com.estaine.elo.format.RatingFormatter;
 import com.estaine.elo.service.RatingService;
-import java.util.Map;
+import com.estaine.elo.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class WebController {
@@ -17,11 +17,28 @@ public class WebController {
     private RatingService ratingService;
 
     @Autowired
+    private TournamentService tournamentService;
+
+    @Autowired
+    private GroupStatsFormatter groupStatsFormatter;
+
+    @Autowired
     private RatingFormatter ratingFormatter;
 
-    @RequestMapping(value = "/*", method = RequestMethod.GET)
+    @RequestMapping(value = "/rating", method = RequestMethod.GET)
     public String getRatings(Model model) {
         model.addAttribute("ratings", ratingFormatter.formatRating(ratingService.calculateRatings()));
-        return "index";
+        return "rating";
+    }
+
+    @RequestMapping(value = "/tournament/groups", method = RequestMethod.GET)
+    public String getTournamentGroupStats(Model model) {
+        model.addAttribute("groups", groupStatsFormatter.formatGroupStats(tournamentService.getTournamentRoundRobinStats()));
+        return "groups";
+    }
+
+    @RequestMapping(value = "/tournament/playoff", method = RequestMethod.GET)
+    public String getTournamentPlayoffStats(Model model) {
+        return null;
     }
 }

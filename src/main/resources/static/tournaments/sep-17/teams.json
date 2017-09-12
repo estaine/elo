@@ -1,0 +1,74 @@
+[
+  {
+    "name": "AKRM",
+    "player1": {
+      "username": "@akadach"
+    },
+    "player2": {
+      "username": "@rmolchanov"
+    }
+  },
+  {
+    "name": "ARKK",
+    "player1": {
+      "username": "@arykhalski"
+    },
+    "player2": {
+      "username": "@kkovalenko"
+    }
+  },
+  {
+    "name": "DRSL",
+    "player1": {
+      "username": "@dryaboshtanov"
+    },
+    "player2": {
+      "username": "@slukashik"
+    }
+  },
+  {
+    "name": "IPSI",
+    "player1": {
+      "username": "@ipahomov"
+    },
+    "player2": {
+      "username": "@silyashenko"
+    }
+  },
+  {
+    "name": "GOSM",
+    "player1": {
+      "username": "@gognevoj"
+    },
+    "player2": {
+      "username": "@smakarov"
+    }
+  },
+  {
+    "name": "EKJA",
+    "player1": {
+      "username": "@ekrylov"
+    },
+    "player2": {
+      "username": "@jadamchik"
+    }
+  },
+  {
+    "name": "ASVS",
+    "player1": {
+      "username": "@askadorva"
+    },
+    "player2": {
+      "username": "@vsiamro"
+    }
+  },
+  {
+    "name": "DYPY",
+    "player1": {
+      "username": "@dyankovec"
+    },
+    "player2": {
+      "username": "@pyukhnevich"
+    }
+  }
+]

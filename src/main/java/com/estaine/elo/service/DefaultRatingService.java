@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class DefaultRatingService implements RatingService {
 
+    private static final double TOURNAMENT_COEFF = 4.0 / 3.0;
+
     @Autowired
     private PlayerRepository playerRepository;
 
@@ -39,7 +41,11 @@ public class DefaultRatingService implements RatingService {
             Player loser2 =  (winner1 == game.getRedTeamPlayer1()) ? game.getYellowTeamPlayer2() : game.getRedTeamPlayer2();
 
             int goalsAgainst = (winner1 == game.getRedTeamPlayer1()) ? game.getYellowTeamGoals() : game.getRedTeamGoals();
-            double losingPercents = 8.0 - (goalsAgainst / 3.0);
+
+            double multiplier = game.getTournamentGame() ? TOURNAMENT_COEFF : 1;
+            double losingPercents = multiplier * (8.0 - (goalsAgainst / 3.0));
+
+
 
             double loser1Delta = ratings.get(loser1).getRating() * losingPercents / 100.0;
             double loser2Delta = ratings.get(loser2).getRating() * losingPercents / 100.0;

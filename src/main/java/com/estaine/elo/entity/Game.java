@@ -1,6 +1,5 @@
 package com.estaine.elo.entity;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,4 +42,6 @@ public class Game {
     @Column(name = "played_on", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date playedOn;
+
+    private Boolean tournamentGame;
 }

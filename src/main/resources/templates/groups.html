@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <title>Sep'17 tournament - group stage</title>
+    <link rel="stylesheet" th:href="@{/css/rating.css}"
+          href="../../css/rating.css"/>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-6">
+        <table class="rwd-table" style="font-size:16pt;">
+            <tr>
+                <th>#</th>
+                <th>Team</th>
+                <th>+/-</th>
+                <th>Pts</th>
+            </tr>
+            <tr th:each="team,iter : ${groups[0].teams}">
+                <td th:text="${iter.index + 1}">1</td>
+                <!--<td th:text="${team.displayName}" style="color: #ecec3c; font-size: 11pt;">John Hopkins</td>-->
+                <td>
+                    <div class="row" style="text-align: center;">
+                        <div class="col-md-6"><img style="border-radius: 50%; width: 52px; height: 52px;"
+                                                   th:src="@{${'/userpics/' + team.player1.username + '.png'}}"/></div>
+                        <div class="col-md-6"><img style="border-radius: 50%; width: 52px; height: 52px;"
+                                                   th:src="@{${'/userpics/' + team.player2.username + '.png'}}"/></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6" style="font-size: 9pt; text-align: center; padding-top: 2pt;"
+                             th:text="${team.player1.username}">@arykhalski
+                        </div>
+                        <div class="col-md-6" style="font-size: 9pt; text-align: center; padding-top: 2pt;"
+                             th:text="${team.player2.username}">@kkovalenko
+                        </div>
+                    </div>
+                </td>
+                <td th:text="${team.goalsDelta}">11</td>
+                <td th:text="${team.points}"><b>5</b></td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="rwd-table" style="font-size:16pt;">
+            <tr>
+                <th>#</th>
+                <th>Team</th>
+                <th>+/-</th>
+                <th>Pts</th>
+            </tr>
+            <tr th:each="team,iter : ${groups[1].teams}">
+                <td th:text="${iter.index + 1}">1</td>
+                <!--<td th:text="${team.displayName}" style="color: #ecec3c; font-size: 11pt;">John Hopkins</td>-->
+                <td>
+                    <div class="row" style="text-align: center;">
+                        <div class="col-md-6"><img style="border-radius: 50%; width: 52px; height: 52px;"
+                                                   th:src="@{${'/userpics/' + team.player1.username + '.png'}}"/></div>
+                        <div class="col-md-6"><img style="border-radius: 50%; width: 52px; height: 52px;"
+                                                   th:src="@{${'/userpics/' + team.player2.username + '.png'}}"/></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6" style="font-size: 9pt; text-align: center; padding-top: 2pt;"
+                             th:text="${team.player1.username}">@arykhalski
+                        </div>
+                        <div class="col-md-6" style="font-size: 9pt; text-align: center; padding-top: 2pt;"
+                             th:text="${team.player2.username}">@kkovalenko
+                        </div>
+                    </div>
+                </td>
+                <td th:text="${team.goalsDelta}">11</td>
+                <td th:text="${team.points}"><b>5</b></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <table class="rwd-table">
+            <tr>
+                <th><div style="width: 12px; height: 12px; border-radius: 50%; background-color: red; margin: auto;"/></th>
+                <th></th>
+                <th><div style="width: 12px; height: 12px; border-radius: 50%; background-color: yellow; margin: auto;"/></th>
+            </tr>
+            <tr th:each="game : ${groups[0].games}">
+                <td>
+                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                         th:src="@{${'/userpics/' + game.redTeam.player1.username + '.png'}}"/>
+                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                         th:src="@{${'/userpics/' + game.redTeam.player2.username + '.png'}}"/>
+                </td>
+                <td th:text="${game.redGoals + ' : ' + game.yellowGoals}">5:10</td>
+                <td>
+                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                         th:src="@{${'/userpics/' + game.yellowTeam.player1.username + '.png'}}"/>
+                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                         th:src="@{${'/userpics/' + game.yellowTeam.player2.username + '.png'}}"/>
+                </td>
+            </tr>
+           
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="rwd-table">
+            <tr>
+                <th><div style="width: 12px; height: 12px; border-radius: 50%; background-color: red; margin: auto;"/></th>
+                <th></th>
+                <th><div style="width: 12px; height: 12px; border-radius: 50%; background-color: yellow; margin: auto;"/></th>
+            </tr>
+            <tr th:each="game : ${groups[1].games}">
+                <td>
+                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                         th:src="@{${'/userpics/' + game.redTeam.player1.username + '.png'}}"/>
+                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                         th:src="@{${'/userpics/' + game.redTeam.player2.username + '.png'}}"/>
+                </td>
+                <td th:text="${game.redGoals + ' : ' + game.yellowGoals}">5:10</td>
+                <td>
+                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                         th:src="@{${'/userpics/' + game.yellowTeam.player1.username + '.png'}}"/>
+                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                         th:src="@{${'/userpics/' + game.yellowTeam.player2.username + '.png'}}"/>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+</body>
+</html>

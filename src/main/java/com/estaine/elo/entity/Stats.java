@@ -8,7 +8,7 @@ import lombok.Data;
 public class Stats {
 
     private Double rating;
-    private Integer gamesPlayed;
+    private int gamesPlayed;
 
     public void updateRating(double rating) {
         this.rating = rating;

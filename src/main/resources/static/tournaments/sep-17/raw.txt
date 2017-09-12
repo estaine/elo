@@ -1,0 +1,4 @@
+Group   Red     Yellow  Res
+1       GOSM    DRSL    10:1
+1       DRSL    GOSM    5:10
+2       IPSI    ARKK    2:10

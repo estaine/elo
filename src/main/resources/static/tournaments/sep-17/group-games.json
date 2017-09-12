@@ -1,0 +1,41 @@
+[
+  {
+    "group": {
+      "name": "Group 1"
+    },
+    "redTeam": {
+      "name": "GOSM"
+    },
+    "yellowTeam": {
+      "name": "DRSL"
+    },
+    "redGoals": 10,
+    "yellowGoals": 1
+  },
+  {
+    "group": {
+      "name": "Group 1"
+    },
+    "redTeam": {
+      "name": "DRSL"
+    },
+    "yellowTeam": {
+      "name": "GOSM"
+    },
+    "redGoals": 5,
+    "yellowGoals": 10
+  },
+  {
+    "group": {
+      "name": "Group 2"
+    },
+    "redTeam": {
+      "name": "IPSI"
+    },
+    "yellowTeam": {
+      "name": "ARKK"
+    },
+    "redGoals": 2,
+    "yellowGoals": 10
+  }
+]

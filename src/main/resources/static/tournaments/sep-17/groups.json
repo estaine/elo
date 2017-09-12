@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Group 1",
+    "teams": [
+      {
+        "name": "AKRM"
+      },
+      {
+        "name": "DRSL"
+      },
+      {
+        "name": "GOSM"
+      },
+      {
+        "name": "ASVS"
+      }
+    ]
+  },
+  {
+    "name": "Group 2",
+    "teams": [
+      {
+        "name": "ARKK"
+      },
+      {
+        "name": "IPSI"
+      },
+      {
+        "name": "EKJA"
+      },
+      {
+        "name": "DYPY"
+      }
+    ]
+  }
+]
