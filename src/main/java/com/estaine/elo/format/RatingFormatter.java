@@ -1,7 +1,7 @@
 package com.estaine.elo.format;
 
 import com.estaine.elo.entity.Player;
-import com.estaine.elo.entity.Stats;
+import com.estaine.elo.entity.BaseStats;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -16,8 +16,8 @@ public class RatingFormatter {
 
     private static final int SIGNIFICANCE_THRESHOLD = 1;
 
-    public List<Entry<Player, Stats>> formatRating(Map<Player, Stats> ratings) {
-        List<Entry<Player, Stats>> sortedRatings = new LinkedList<>(ratings.entrySet());
+    public List<Entry<Player, BaseStats>> formatRating(Map<Player, BaseStats> ratings) {
+        List<Entry<Player, BaseStats>> sortedRatings = new LinkedList<>(ratings.entrySet());
         sortedRatings.sort(Comparator.comparing(stats -> stats.getValue().getRating()));
         Collections.reverse(sortedRatings);
 

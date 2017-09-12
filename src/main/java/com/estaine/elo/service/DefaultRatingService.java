@@ -2,7 +2,7 @@ package com.estaine.elo.service;
 
 import com.estaine.elo.entity.Game;
 import com.estaine.elo.entity.Player;
-import com.estaine.elo.entity.Stats;
+import com.estaine.elo.entity.BaseStats;
 import com.estaine.elo.repository.GameRepository;
 import com.estaine.elo.repository.PlayerRepository;
 import java.util.HashMap;
@@ -23,15 +23,15 @@ public class DefaultRatingService implements RatingService {
     private GameRepository gameRepository;
 
     @Override
-    public Map<Player, Stats> calculateRatings() {
+    public Map<Player, BaseStats> calculateRatings() {
 
         List<Player> players = playerRepository.findAll();
         List<Game> games = gameRepository.findAllByOrderByPlayedOnAsc();
 
-        Map<Player, Stats> ratings = new HashMap<>();
+        Map<Player, BaseStats> ratings = new HashMap<>();
 
         for(Player player : players) {
-            ratings.put(player, new Stats(100.0, 0));
+            ratings.put(player, new BaseStats(100.0, 0));
         }
 
         for(Game game : games) {
@@ -56,7 +56,7 @@ public class DefaultRatingService implements RatingService {
             ratings.get(loser2).updateRating(ratings.get(loser2).getRating() - loser2Delta);
 
 
-            for(Map.Entry<Player, Stats> playerRating : ratings.entrySet()) {
+            for(Map.Entry<Player, BaseStats> playerRating : ratings.entrySet()) {
                 System.out.println(playerRating.getKey().getUsername() + " " + String.format("%.2f",playerRating.getValue().getRating()));
             }
 

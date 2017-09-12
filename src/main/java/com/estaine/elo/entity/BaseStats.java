@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Stats {
+public class BaseStats {
 
     private Double rating;
     private int gamesPlayed;

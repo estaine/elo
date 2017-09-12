@@ -2,11 +2,13 @@ package com.estaine.elo.controller;
 
 import com.estaine.elo.format.GroupStatsFormatter;
 import com.estaine.elo.format.RatingFormatter;
+import com.estaine.elo.service.PlayerStatsService;
 import com.estaine.elo.service.RatingService;
 import com.estaine.elo.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -18,6 +20,9 @@ public class WebController {
 
     @Autowired
     private TournamentService tournamentService;
+
+    @Autowired
+    private PlayerStatsService playerStatsService;
 
     @Autowired
     private GroupStatsFormatter groupStatsFormatter;
@@ -41,4 +46,12 @@ public class WebController {
     public String getTournamentPlayoffStats(Model model) {
         return null;
     }
+
+    @RequestMapping(value = "/player/{username}", method = RequestMethod.GET)
+    public String getPlayerStats(Model model, @PathVariable String username) {
+        playerStatsService.getPlayerStats(username);
+        return null;
+    }
+
+
 }
