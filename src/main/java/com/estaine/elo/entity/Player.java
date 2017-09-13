@@ -4,9 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Player {
 
     @Id
@@ -23,4 +25,22 @@ public class Player {
         return firstName + " " + lastName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Player player = (Player) o;
+
+        return username.equals(player.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return username.hashCode();
+    }
 }

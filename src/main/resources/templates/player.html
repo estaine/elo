@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Player stats - <span th:text="${playerStats.player.fullName}"></span></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/css/rating.css}"
+          href="../../css/rating.css"/>
+</head>
+<body>
+
+<div class="row justify-content-md-center">
+    <div class="col-md-4">
+        <table class="rwd-table">
+            <tr>
+                <td>
+                    <img style="border-radius: 50%; width: 72px; height: 72px;"
+                         th:src="@{${'/userpics/' + playerStats.player.username + '.png'}}"/>
+                </td>
+                <td colspan="2" style="font-size: 20pt;" th:text="${playerStats.player.fullName}">John Doe</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Rating</td>
+                <td th:text="${#numbers.formatDecimal(playerStats.baseStats.rating * 100, 0, 0)}"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Games played</td>
+                <td th:text="${playerStats.baseStats.gamesPlayed}"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Goals for</td>
+                <td th:text="${playerStats.goalsFor}"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Goals against</td>
+                <td th:text="${playerStats.goalsAgainst}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="row justify-content-md-center">
+    <div class="col-md-6">
+        <table class="rwd-table">
+            <tr>
+                <th>
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: red; margin: auto;"/>
+                </th>
+                <th></th>
+                <th>
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: yellow; margin: auto;"/>
+                </th>
+            </tr>
+            <tr th:each="game : ${playerStats.games}">
+                <td>
+                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                         th:src="@{${'/userpics/' + game.redTeamPlayer1.username + '.png'}}"/>
+                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                         th:src="@{${'/userpics/' + game.redTeamPlayer2.username + '.png'}}"/>
+                </td>
+                <td th:classappend="${playerStats.results[__${game.id}__]} ? score-win : score-lose" th:text="${game.redTeamGoals + ' : ' + game.yellowTeamGoals}">5:10</td>
+                <td>
+                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                         th:src="@{${'/userpics/' + game.yellowTeamPlayer1.username + '.png'}}"/>
+                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                         th:src="@{${'/userpics/' + game.yellowTeamPlayer2.username + '.png'}}"/>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+
+</body>
+</html>

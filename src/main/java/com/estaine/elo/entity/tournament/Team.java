@@ -15,12 +15,17 @@ public class Team {
     public void registerGame(int delta) {
         goalsDelta += delta;
         gamesPlayed++;
-        if(delta > 0) {
+        if (delta > 0) {
             points++;
         }
     }
 
     public String getDisplayName() {
         return player1.getUsername() + " & " + player2.getUsername();
+    }
+
+    public boolean consistsOf(Player player1, Player player2) {
+        return (this.player1.equals(player1) && this.player2.equals(player2))
+                || (this.player1.equals(player2) && this.player2.equals(player1));
     }
 }

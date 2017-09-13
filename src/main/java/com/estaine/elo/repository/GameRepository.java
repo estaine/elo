@@ -12,6 +12,6 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     List<Game> findAllByOrderByPlayedOnAsc();
 
-    @Query("SELECT g FROM Game g WHERE g.redTeamPlayer1 = ?1 OR g.redTeamPlayer2 = ?1 OR g.yellowTeamPlayer1 = ?1 OR g.yellowTeamPlayer2 = ?1")
+    @Query("SELECT g FROM Game g WHERE g.redTeamPlayer1 = ?1 OR g.redTeamPlayer2 = ?1 OR g.yellowTeamPlayer1 = ?1 OR g.yellowTeamPlayer2 = ?1 ORDER BY g.playedOn DESC")
     List<Game> findAllByPlayer(Player player);
 }

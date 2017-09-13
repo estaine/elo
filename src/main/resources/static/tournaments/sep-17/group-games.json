@@ -37,5 +37,44 @@
     },
     "redGoals": 2,
     "yellowGoals": 10
+  },
+  {
+    "group": {
+      "name": "Group 1"
+    },
+    "redTeam": {
+      "name": "AKRM"
+    },
+    "yellowTeam": {
+      "name": "ASVS"
+    },
+    "redGoals": 10,
+    "yellowGoals": 3
+  },
+  {
+    "group": {
+      "name": "Group 1"
+    },
+    "redTeam": {
+      "name": "ASVS"
+    },
+    "yellowTeam": {
+      "name": "AKRM"
+    },
+    "redGoals": 3,
+    "yellowGoals": 10
+  },
+  {
+    "group": {
+      "name": "Group 2"
+    },
+    "redTeam": {
+      "name": "DYPY"
+    },
+    "yellowTeam": {
+      "name": "ARKK"
+    },
+    "redGoals": 7,
+    "yellowGoals": 10
   }
 ]

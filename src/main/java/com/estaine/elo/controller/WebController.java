@@ -49,8 +49,8 @@ public class WebController {
 
     @RequestMapping(value = "/player/{username}", method = RequestMethod.GET)
     public String getPlayerStats(Model model, @PathVariable String username) {
-        playerStatsService.getPlayerStats(username);
-        return null;
+        model.addAttribute("playerStats", playerStatsService.getPlayerStats(username));
+        return "player";
     }
 
 

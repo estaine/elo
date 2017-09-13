@@ -83,3 +83,35 @@ h1 {
 .rwd-table th, .rwd-table td:before {
   color: #819db9;
 }
+
+/* unvisited link */
+a:link {
+  color: #fff !important;
+  text-decoration: none;
+}
+
+/* visited link */
+a:visited {
+  color: #fff !important;
+  text-decoration: none;
+}
+
+/* mouse over link */
+a:hover {
+  color: #999999 !important;
+  text-decoration: none;
+}
+
+/* selected link */
+a:active {
+  color: #fff !important;
+  text-decoration: none;
+}
+
+.score-lose {
+  color: #ff3c3c;
+}
+
+.score-win {
+  color: #3cff3c;
+}

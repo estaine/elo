@@ -19,7 +19,7 @@
         <td th:text="${iter.index + 1}">1</td>
         <td><img style="border-radius: 50%; width: 28px; height: 28px;"
                  th:src="@{${'/userpics/' + playerStats.key.username + '.png'}}"/></td>
-        <td th:text="${playerStats.key.fullName}">John Hopkins</td>
+        <td><a th:href="'/player/' + ${playerStats.key.username}"><span th:text="${playerStats.key.fullName}"/></a></td>
         <td th:text="${playerStats.value.gamesPlayed}">11</td>
         <td th:text="${#numbers.formatDecimal(playerStats.value.rating * 100, 0, 0)}"><b>133.05</b></td>
     </tr>
