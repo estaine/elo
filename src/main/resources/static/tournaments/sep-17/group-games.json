@@ -76,5 +76,18 @@
     },
     "redGoals": 7,
     "yellowGoals": 10
+  },
+  {
+    "group": {
+      "name": "Group 2"
+    },
+    "redTeam": {
+      "name": "ARKK"
+    },
+    "yellowTeam": {
+      "name": "IPSI"
+    },
+    "redGoals": 10,
+    "yellowGoals": 2
   }
 ]

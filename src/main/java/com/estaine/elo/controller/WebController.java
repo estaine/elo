@@ -30,19 +30,25 @@ public class WebController {
     @Autowired
     private RatingFormatter ratingFormatter;
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String getDefault(Model model) {
+        return getRatings(model);
+    }
+
     @RequestMapping(value = "/rating", method = RequestMethod.GET)
     public String getRatings(Model model) {
         model.addAttribute("ratings", ratingFormatter.formatRating(ratingService.calculateRatings()));
         return "rating";
     }
 
-    @RequestMapping(value = "/tournament/groups", method = RequestMethod.GET)
-    public String getTournamentGroupStats(Model model) {
+    @RequestMapping(value = "/tournament/{tournamentId}/groups", method = RequestMethod.GET)
+    public String getTournamentGroupStats(Model model, @PathVariable Long tournamentId) {
         model.addAttribute("groups", groupStatsFormatter.formatGroupStats(tournamentService.getTournamentRoundRobinStats()));
+        //List<Box> boxes = groupStatsFormatter.formatBoxStats(tournamentService.getBoxStats(tournamentId));
         return "groups";
     }
 
-    @RequestMapping(value = "/tournament/playoff", method = RequestMethod.GET)
+    @RequestMapping(value = "/tournament/{id}/playoff", method = RequestMethod.GET)
     public String getTournamentPlayoffStats(Model model) {
         return null;
     }
@@ -52,6 +58,4 @@ public class WebController {
         model.addAttribute("playerStats", playerStatsService.getPlayerStats(username));
         return "player";
     }
-
-
 }

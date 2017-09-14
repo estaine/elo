@@ -21,19 +21,19 @@ public class SlackController {
             @RequestParam("user_id") String userId, @RequestParam("user_name") String userName, @RequestParam String command,
             @RequestParam String text, @RequestParam("response_url") String responseUrl, @RequestParam("trigger_id") String triggerId) {
 
-            System.out.println("token: " + token );
-            System.out.println("teamId: " + teamId );
-            System.out.println("teamDomain: " + teamDomain );
-            System.out.println("channelId: " + channelId );
-            System.out.println("channelName: " + channelName );
-            System.out.println("userId: " + userId );
-            System.out.println("userName: " + userName );
-            System.out.println("command: " + command );
-            System.out.println("text: " + text );
-            System.out.println("responseUrl: " + responseUrl );
-            System.out.println("triggerId: " + triggerId );
+        System.out.println("token: " + token);
+        System.out.println("teamId: " + teamId);
+        System.out.println("teamDomain: " + teamDomain);
+        System.out.println("channelId: " + channelId);
+        System.out.println("channelName: " + channelName);
+        System.out.println("userId: " + userId);
+        System.out.println("userName: " + userName);
+        System.out.println("command: " + command);
+        System.out.println("text: " + text);
+        System.out.println("responseUrl: " + responseUrl);
+        System.out.println("triggerId: " + triggerId);
 
-            return gameService.registerMatch(userName, channelName, text, token);
+        return gameService.registerMatch(userName, channelName, text, token);
     }
 
     @RequestMapping(value = "/cup-match", method = RequestMethod.POST, headers = "Content-Type=application/x-www-form-urlencoded", consumes = {MediaType.ALL_VALUE})

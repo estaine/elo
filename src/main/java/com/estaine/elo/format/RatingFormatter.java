@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RatingFormatter {
 
-    private static final int SIGNIFICANCE_THRESHOLD = 1;
+    private static final int SIGNIFICANCE_THRESHOLD = 5;
 
     public List<Entry<Player, BaseStats>> formatRating(Map<Player, BaseStats> ratings) {
         List<Entry<Player, BaseStats>> sortedRatings = new LinkedList<>(ratings.entrySet());

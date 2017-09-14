@@ -43,4 +43,9 @@ public class Player {
     public int hashCode() {
         return username.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Player{}";
+    }
 }

@@ -7,7 +7,7 @@ import com.estaine.elo.entity.tournament.GroupGame;
 import com.estaine.elo.entity.tournament.Team;
 import com.estaine.elo.repository.GameRepository;
 import com.estaine.elo.repository.PlayerRepository;
-import com.estaine.elo.repository.TournamentRepository;
+import com.estaine.elo.repository.TournamentFileRepository;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -32,7 +32,7 @@ public class DefaultGameService implements GameService {
     private GameRepository gameRepository;
 
     @Autowired
-    private TournamentRepository tournamentRepository;
+    private TournamentFileRepository tournamentFileRepository;
 
     @Override
     public String registerMatch(String requester, String channelName, String request, String token) {
@@ -145,10 +145,10 @@ public class DefaultGameService implements GameService {
                 return "All players in match should be unique";
             }
 
-            Set<Player> players = tournamentRepository.readParticipants();
-            Map<String, Team> teams = tournamentRepository.readTeams();
-            Map<String, Group> groups = tournamentRepository.readGroups(teams);
-            Map<String, List<GroupGame>> groupGames = tournamentRepository.readGroupGames(groups, teams);
+            Set<Player> players = tournamentFileRepository.readParticipants();
+            Map<String, Team> teams = tournamentFileRepository.readTeams();
+            Map<String, Group> groups = tournamentFileRepository.readGroups(teams);
+            Map<String, List<GroupGame>> groupGames = tournamentFileRepository.readGroupGames(groups, teams);
 
             if(players.stream().noneMatch(u -> u.getUsername().equals(red1Username))) {
                 return "Player " + red1Username + " is not registered as a participant of current tournament";
