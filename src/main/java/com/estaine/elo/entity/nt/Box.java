@@ -26,4 +26,9 @@ public class Box {
 
     @OneToMany(mappedBy = "box")
     private List<BoxGame> boxGames;
+
+    @Override
+    public String toString() {
+        return name + " in " + tournament.getName() + ". " + teams.size() + " teams.";
+    }
 }

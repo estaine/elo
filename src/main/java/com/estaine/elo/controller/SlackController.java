@@ -16,23 +16,10 @@ public class SlackController {
     private GameService gameService;
 
     @RequestMapping(value = "/match", method = RequestMethod.POST, headers = "Content-Type=application/x-www-form-urlencoded", consumes = {MediaType.ALL_VALUE})
-    public String registerMatch(@RequestParam String token, @RequestParam("team_id") String teamId, @RequestParam("team_domain") String teamDomain,
-            @RequestParam("channel_id") String channelId, @RequestParam("channel_name") String channelName,
-            @RequestParam("user_id") String userId, @RequestParam("user_name") String userName, @RequestParam String command,
-            @RequestParam String text, @RequestParam("response_url") String responseUrl, @RequestParam("trigger_id") String triggerId) {
+    public String registerMatch(@RequestParam String token, @RequestParam("channel_name") String channelName,
+            @RequestParam("user_name") String userName, @RequestParam String text) {
 
-        System.out.println("token: " + token);
-        System.out.println("teamId: " + teamId);
-        System.out.println("teamDomain: " + teamDomain);
-        System.out.println("channelId: " + channelId);
-        System.out.println("channelName: " + channelName);
-        System.out.println("userId: " + userId);
-        System.out.println("userName: " + userName);
-        System.out.println("command: " + command);
-        System.out.println("text: " + text);
-        System.out.println("responseUrl: " + responseUrl);
-        System.out.println("triggerId: " + triggerId);
-
+        System.out.println("Slack request received from @" + userName);
         return gameService.registerMatch(userName, channelName, text, token);
     }
 
@@ -42,6 +29,8 @@ public class SlackController {
             @RequestParam("user_id") String userId, @RequestParam("user_name") String userName, @RequestParam String command,
             @RequestParam String text, @RequestParam("response_url") String responseUrl, @RequestParam("trigger_id") String triggerId) {
 
-        return gameService.registerTournamentMatch(userName, channelName, text, token);
+        //return gameService.registerTournamentMatch(userName, channelName, text, token);
+        return "Not implemented yet";
+
     }
 }

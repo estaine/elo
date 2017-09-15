@@ -1,15 +1,19 @@
 package com.estaine.elo.entity;
 
+import com.estaine.elo.entity.nt.BoxGame;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
 
 @Data
 @Entity
@@ -39,9 +43,21 @@ public class Game {
 
     private int yellowTeamGoals;
 
+    @OneToOne(mappedBy = "game", fetch = FetchType.EAGER)
+    private BoxGame boxGame;
+
     @Column(name = "played_on", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date playedOn;
 
-    private Boolean tournamentGame;
+    public boolean isTournamentGame() {
+        return boxGame != null;
+    }
+
+    @Override
+    public String toString() {
+        return redTeamPlayer1.getUsername() + " & " + redTeamPlayer2.getUsername() + " vs "
+                + yellowTeamPlayer1 + " & " + yellowTeamPlayer2.getUsername() + " "
+                + redTeamGoals + ":" + yellowTeamGoals;
+    }
 }

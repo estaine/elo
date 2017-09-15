@@ -89,5 +89,18 @@
     },
     "redGoals": 10,
     "yellowGoals": 2
+  },
+  {
+    "group": {
+      "name": "Group 1"
+    },
+    "redTeam": {
+      "name": "GOSM"
+    },
+    "yellowTeam": {
+      "name": "AKRM"
+    },
+    "redGoals": 6,
+    "yellowGoals": 10
   }
 ]

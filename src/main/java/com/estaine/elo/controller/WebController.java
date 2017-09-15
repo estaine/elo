@@ -1,6 +1,7 @@
 package com.estaine.elo.controller;
 
 import com.estaine.elo.format.GroupStatsFormatter;
+import com.estaine.elo.format.PlayerStatsFormatter;
 import com.estaine.elo.format.RatingFormatter;
 import com.estaine.elo.service.PlayerStatsService;
 import com.estaine.elo.service.RatingService;
@@ -28,14 +29,12 @@ public class WebController {
     private GroupStatsFormatter groupStatsFormatter;
 
     @Autowired
+    private PlayerStatsFormatter playerStatsFormatter;
+
+    @Autowired
     private RatingFormatter ratingFormatter;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getDefault(Model model) {
-        return getRatings(model);
-    }
-
-    @RequestMapping(value = "/rating", method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "/rating"}, method = RequestMethod.GET)
     public String getRatings(Model model) {
         model.addAttribute("ratings", ratingFormatter.formatRating(ratingService.calculateRatings()));
         return "rating";
@@ -43,8 +42,7 @@ public class WebController {
 
     @RequestMapping(value = "/tournament/{tournamentId}/groups", method = RequestMethod.GET)
     public String getTournamentGroupStats(Model model, @PathVariable Long tournamentId) {
-        model.addAttribute("groups", groupStatsFormatter.formatGroupStats(tournamentService.getTournamentRoundRobinStats()));
-        //List<Box> boxes = groupStatsFormatter.formatBoxStats(tournamentService.getBoxStats(tournamentId));
+        model.addAttribute("tournament", groupStatsFormatter.formatTournament(tournamentService.getBoxStats(tournamentId)));
         return "groups";
     }
 
@@ -55,7 +53,7 @@ public class WebController {
 
     @RequestMapping(value = "/player/{username}", method = RequestMethod.GET)
     public String getPlayerStats(Model model, @PathVariable String username) {
-        model.addAttribute("playerStats", playerStatsService.getPlayerStats(username));
+        model.addAttribute("playerStats", playerStatsFormatter.formatPlayerStats(playerStatsService.getPlayerStats(username)));
         return "player";
     }
 }

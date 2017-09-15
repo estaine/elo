@@ -6,3 +6,4 @@ Group   Red     Yellow  Res
 1       ASVS    AKRM    3:10
 2       DYPY    ARKK    7:10
 2       ARKK    IPSI    10:2
+1       GOSM    AKRM    6:10

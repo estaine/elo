@@ -50,4 +50,10 @@ public class Team {
             points++;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Team " + name + ": " + player1.getUsername() + ", " + player2.getUsername()
+                + ". Pts: " + points + ". G+-: " + goalsDelta;
+    }
 }

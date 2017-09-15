@@ -22,8 +22,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class DefaultGameService implements GameService {
 
-    private static final String ACCEPTED_CHANNEL_NAME = "general";
-    private static final String TOKEN = "aQlauXOI7fAL5U3s62z6KnJA";
+    private static final String ACCEPTED_CHANNEL_NAME = "by_kicker";
+    private static final String TOKEN = "WausWIrVX3IvJAgRowlMHWlp";
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -93,6 +93,14 @@ public class DefaultGameService implements GameService {
                 return "Draws are not supported";
             }
 
+            if((redGoals > 10) || (yellowGoals > 10)) {
+                return "Goals count should be no more than 10 for each team";
+            }
+
+            if((redGoals < 0) || (yellowGoals < 0)) {
+                return "Negative goals count? Really?..;";
+            }
+
             boolean redLostRequesterNotRed = (redGoals < yellowGoals)
                     && (!requesterUsername.equals(red1Username) && !requesterUsername.equals(red2Username));
 
@@ -111,7 +119,6 @@ public class DefaultGameService implements GameService {
             game.setRedTeamGoals(redGoals);
             game.setYellowTeamGoals(yellowGoals);
             game.setPlayedOn(new Date());
-            game.setTournamentGame(false);
 
             gameRepository.save(game);
 

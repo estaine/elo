@@ -85,7 +85,7 @@ public class DefaultTournamentService implements TournamentService {
     }
 
     @Override
-    public List<Box> getBoxStats(Long tournamentId) {
+    public Tournament getBoxStats(Long tournamentId) {
         Tournament tournament = tournamentRepository.findOne(tournamentId);
 
         if (tournament == null) {
@@ -94,7 +94,7 @@ public class DefaultTournamentService implements TournamentService {
 
         for(Box box : tournament.getBoxes()) {
             for(BoxGame boxGame : box.getBoxGames()) {
-                if(boxGame.getGame() != null) {
+                if(boxGame.isPlayed()) {
                     com.estaine.elo.entity.nt.Team winner =
                             (boxGame.getGame().getRedTeamGoals() > boxGame.getGame().getYellowTeamGoals())
                             ? boxGame.getRedTeam() : boxGame.getYellowTeam();
@@ -110,6 +110,6 @@ public class DefaultTournamentService implements TournamentService {
             }
         }
 
-        return tournament.getBoxes();
+        return tournament;
     }
 }

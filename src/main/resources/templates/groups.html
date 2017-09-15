@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
-    <title>Sep'17 tournament - group stage</title>
+    <title th:text="${tournament.name}">Sep'17 tournament - group stage</title>
     <link rel="stylesheet" th:href="@{/css/rating.css}"
           href="../../css/rating.css"/>
 </head>
@@ -14,15 +14,15 @@
         <table class="rwd-table" style="font-size:16pt;">
             <tr>
                 <th>#</th>
-                <th>Team</th>
+                <th style="text-align: center;">Team</th>
                 <th>+/-</th>
                 <th>Pts</th>
             </tr>
-            <tr th:each="team,iter : ${groups[0].teams}">
+            <tr th:each="team,iter : ${tournament.boxes[0].teams}">
                 <td th:text="${iter.index + 1}">1</td>
                 <!--<td th:text="${team.displayName}" style="color: #ecec3c; font-size: 11pt;">John Hopkins</td>-->
                 <td>
-                    <div class="row" style="text-align: center;">
+                    <div class="row" style="text-align: center; width: 280px;">
                         <div class="col-md-6"><img style="border-radius: 50%; width: 44px; height: 44px;"
                                                    th:src="@{${'/userpics/' + team.player1.username + '.png'}}"/></div>
                         <div class="col-md-6"><img style="border-radius: 50%; width: 44px; height: 44px;"
@@ -39,7 +39,7 @@
                     </div>
                 </td>
                 <td th:text="${team.goalsDelta}">11</td>
-                <td th:text="${team.points}"><b>5</b></td>
+                <td th:text="${team.points}" style="text-align: right;"><b>5</b></td>
             </tr>
         </table>
     </div>
@@ -47,15 +47,15 @@
         <table class="rwd-table" style="font-size:16pt;">
             <tr>
                 <th>#</th>
-                <th>Team</th>
+                <th style="text-align: center;">Team</th>
                 <th>+/-</th>
                 <th>Pts</th>
             </tr>
-            <tr th:each="team,iter : ${groups[1].teams}">
+            <tr th:each="team,iter : ${tournament.boxes[1].teams}">
                 <td th:text="${iter.index + 1}">1</td>
                 <!--<td th:text="${team.displayName}" style="color: #ecec3c; font-size: 11pt;">John Hopkins</td>-->
                 <td>
-                    <div class="row" style="text-align: center;">
+                    <div class="row" style="text-align: center; width: 280px;">
                         <div class="col-md-6"><img style="border-radius: 50%; width: 44px; height: 44px;"
                                                    th:src="@{${'/userpics/' + team.player1.username + '.png'}}"/></div>
                         <div class="col-md-6"><img style="border-radius: 50%; width: 44px; height: 44px;"
@@ -72,7 +72,7 @@
                     </div>
                 </td>
                 <td th:text="${team.goalsDelta}">11</td>
-                <td th:text="${team.points}"><b>5</b></td>
+                <td th:text="${team.points}" style="text-align: right;"><b>5</b></td>
             </tr>
         </table>
     </div>
@@ -81,48 +81,56 @@
     <div class="col-md-6">
         <table class="rwd-table">
             <tr>
-                <th><div style="width: 12px; height: 12px; border-radius: 50%; background-color: red; margin: auto;"/></th>
+                <th>
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: red; margin: auto;"/>
+                </th>
                 <th></th>
-                <th><div style="width: 12px; height: 12px; border-radius: 50%; background-color: yellow; margin: auto;"/></th>
+                <th>
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: yellow; margin: auto;"/>
+                </th>
             </tr>
-            <tr th:each="game : ${groups[0].games}">
-                <td>
+            <tr th:each="boxGame : ${tournament.boxes[0].boxGames}">
+                <td style="text-align: center;">
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + game.redTeam.player1.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + boxGame.redTeam.player1.username + '.png'}}"/>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + game.redTeam.player2.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + boxGame.redTeam.player2.username + '.png'}}"/>
                 </td>
-                <td th:text="${game.redGoals + ' : ' + game.yellowGoals}">5:10</td>
-                <td>
+                <td th:text="${boxGame.played ? boxGame.game.redTeamGoals + ' : ' + boxGame.game.yellowTeamGoals : '-:-'}" style="text-align: center;">5:10</td>
+                <td style="text-align: center;">
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + game.yellowTeam.player1.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + boxGame.yellowTeam.player1.username + '.png'}}"/>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + game.yellowTeam.player2.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + boxGame.yellowTeam.player2.username + '.png'}}"/>
                 </td>
             </tr>
-           
+
         </table>
     </div>
     <div class="col-md-6">
         <table class="rwd-table">
             <tr>
-                <th><div style="width: 12px; height: 12px; border-radius: 50%; background-color: red; margin: auto;"/></th>
+                <th>
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: red; margin: auto;"/>
+                </th>
                 <th></th>
-                <th><div style="width: 12px; height: 12px; border-radius: 50%; background-color: yellow; margin: auto;"/></th>
+                <th>
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: yellow; margin: auto;"/>
+                </th>
             </tr>
-            <tr th:each="game : ${groups[1].games}">
-                <td>
+            <tr th:each="boxGame : ${tournament.boxes[1].boxGames}">
+                <td style="text-align: center;">
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + game.redTeam.player1.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + boxGame.redTeam.player1.username + '.png'}}"/>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + game.redTeam.player2.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + boxGame.redTeam.player2.username + '.png'}}"/>
                 </td>
-                <td th:text="${game.redGoals + ' : ' + game.yellowGoals}">5:10</td>
-                <td>
+                <td th:text="${boxGame.played ? boxGame.game.redTeamGoals + ' : ' + boxGame.game.yellowTeamGoals : '-:-'}" style="text-align: center;">5:10</td>
+                <td style="text-align: center;">
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + game.yellowTeam.player1.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + boxGame.yellowTeam.player1.username + '.png'}}"/>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + game.yellowTeam.player2.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + boxGame.yellowTeam.player2.username + '.png'}}"/>
                 </td>
             </tr>
 
