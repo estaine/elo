@@ -1,6 +1,6 @@
 package com.estaine.elo.entity;
 
-import com.estaine.elo.entity.nt.BoxGame;
+import com.estaine.elo.entity.tournament.BoxGame;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +13,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
-import org.hibernate.annotations.Fetch;
 
 @Data
 @Entity

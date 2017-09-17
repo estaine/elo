@@ -21,6 +21,8 @@ public class Player {
 
     private String lastName;
 
+    private String imChannel;
+
     public String getFullName() {
         return firstName + " " + lastName;
     }

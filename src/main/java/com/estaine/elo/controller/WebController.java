@@ -40,15 +40,10 @@ public class WebController {
         return "rating";
     }
 
-    @RequestMapping(value = "/tournament/{tournamentId}/groups", method = RequestMethod.GET)
+    @RequestMapping(value = "/tournament/groups", method = RequestMethod.GET)
     public String getTournamentGroupStats(Model model, @PathVariable Long tournamentId) {
         model.addAttribute("tournament", groupStatsFormatter.formatTournament(tournamentService.getBoxStats(tournamentId)));
         return "groups";
-    }
-
-    @RequestMapping(value = "/tournament/{id}/playoff", method = RequestMethod.GET)
-    public String getTournamentPlayoffStats(Model model) {
-        return null;
     }
 
     @RequestMapping(value = "/player/{username}", method = RequestMethod.GET)

@@ -1,4 +1,4 @@
-package com.estaine.elo.entity.nt;
+package com.estaine.elo.entity.tournament;
 
 import java.util.List;
 import javax.persistence.Entity;
@@ -16,6 +16,8 @@ public class Tournament {
     private Long id;
 
     private String name;
+
+    private Boolean active;
 
     @OneToMany(mappedBy = "tournament")
     private List<Box> boxes;
