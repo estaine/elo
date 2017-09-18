@@ -2,22 +2,14 @@ package com.estaine.elo.service;
 
 import com.estaine.elo.entity.Game;
 import com.estaine.elo.entity.Player;
-import com.estaine.elo.entity.tournament.Group;
-import com.estaine.elo.entity.tournament.GroupGame;
-import com.estaine.elo.entity.tournament.Team;
 import com.estaine.elo.repository.GameRepository;
 import com.estaine.elo.repository.PlayerRepository;
-
+import com.estaine.elo.request.SlackNotifier;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
-
-import com.estaine.elo.request.SlackNotifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
