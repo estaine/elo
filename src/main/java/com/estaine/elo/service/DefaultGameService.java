@@ -11,13 +11,16 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DefaultGameService implements GameService {
 
     private static final String ACCEPTED_CHANNEL_NAME = "by_kicker";
-    private static final String TOKEN = "WausWIrVX3IvJAgRowlMHWlp";
+
+    @Value("${slack-token}")
+    private String slackToken;
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -29,8 +32,8 @@ public class DefaultGameService implements GameService {
     private SlackNotifier slackNotifier;
 
     @Override
-    public String registerMatch(String requester, String channelName, String request, String token) {
-        if (!TOKEN.equals(token)) {
+    public String registerMatch(String requesterUsername, String channelName, String request, String token) {
+        if (!slackToken.equals(token)) {
             return "Wrong token. Did you send your request not from Slack?";
         }
 
@@ -42,46 +45,46 @@ public class DefaultGameService implements GameService {
 
             String[] requestParts = request.split(" ");
 
-            String red1Username = requestParts[0];
-            String red2Username = requestParts[1];
-            String yellow1Username = requestParts[3];
-            String yellow2Username = requestParts[4];
+            String red1SlackId = requestParts[0].replace("@", "");
+            String red2SlackId = requestParts[1].replace("@", "");
+            String yellow1SlackId = requestParts[3].replace("@", "");
+            String yellow2SlackId = requestParts[4].replace("@", "");
 
-            Set<String> usernameSet = new HashSet<>(Arrays.asList(red1Username, red2Username, yellow1Username, yellow2Username));
+            Set<String> slackIdSet = new HashSet<>(Arrays.asList(red1SlackId, red2SlackId, yellow1SlackId, yellow2SlackId));
 
-            if (usernameSet.size() < 4) {
+            if (slackIdSet.size() < 4) {
                 return "All players in match should be unique";
             }
 
-            Player red1 = playerRepository.findByUsername(red1Username);
+            Player red1 = playerRepository.findBySlackId(red1SlackId);
 
             if (red1 == null) {
-                return "No player with username " + red1Username + " was found in the DB";
+                return "No player with username " + red1SlackId + " was found in the DB";
             }
 
-            Player red2 = playerRepository.findByUsername(red2Username);
+            Player red2 = playerRepository.findBySlackId(red2SlackId);
 
             if (red2 == null) {
-                return "No player with username " + red2Username + " was found in the DB";
+                return "No player with username " + red2SlackId + " was found in the DB";
             }
 
-            Player yellow1 = playerRepository.findByUsername(yellow1Username);
+            Player yellow1 = playerRepository.findBySlackId(yellow1SlackId);
 
             if (yellow1 == null) {
-                return "No player with username " + yellow1Username + " was found in the DB";
+                return "No player with username " + yellow1SlackId + " was found in the DB";
             }
 
-            Player yellow2 = playerRepository.findByUsername(yellow2Username);
+            Player yellow2 = playerRepository.findBySlackId(yellow2SlackId);
 
             if (yellow2 == null) {
-                return "No player with username " + yellow2Username + " was found in the DB";
+                return "No player with username " + yellow2SlackId + " was found in the DB";
             }
 
             String[] resultParts = requestParts[5].split(":");
             Integer redGoals = Integer.parseInt(resultParts[0]);
             Integer yellowGoals = Integer.parseInt(resultParts[1]);
 
-            String requesterUsername = "@" + requester;
+            Player requester = playerRepository.findByUsername("@" + requesterUsername);
 
             if (Objects.equals(redGoals, yellowGoals)) {
                 return "Draws are not supported";
@@ -95,16 +98,6 @@ public class DefaultGameService implements GameService {
                 return "Negative goals count? Really?..;";
             }
 
-            boolean redLostRequesterNotRed = (redGoals < yellowGoals)
-                    && (!requesterUsername.equals(red1Username) && !requesterUsername.equals(red2Username));
-
-            boolean yellowLostButRequesterNotYellow = (yellowGoals < redGoals)
-                    && (!requesterUsername.equals(yellow1Username) && !requesterUsername.equals(yellow2Username));
-
-            if (redLostRequesterNotRed || yellowLostButRequesterNotYellow) {
-                return "Only losers may register their matches";
-            }
-
             Game game = new Game();
             game.setRedTeamPlayer1(red1);
             game.setRedTeamPlayer2(red2);
@@ -116,7 +109,7 @@ public class DefaultGameService implements GameService {
 
             game = gameRepository.save(game);
 
-            slackNotifier.notifyMatchParticipants(playerRepository.findByUsername(requester), game);
+            slackNotifier.notifyMatchParticipants(requester, game);
 
             return "Match registered";
         } catch (Exception e) {

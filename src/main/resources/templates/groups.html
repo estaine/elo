@@ -16,6 +16,7 @@
                 <th>#</th>
                 <th style="text-align: center;">Team</th>
                 <th>+/-</th>
+                <th>G</th>
                 <th>Pts</th>
             </tr>
             <tr th:each="team,iter : ${tournament.boxes[0].teams}">
@@ -39,6 +40,7 @@
                     </div>
                 </td>
                 <td th:text="${team.goalsDelta}">11</td>
+                <td th:text="${team.gamesPlayed}">4</td>
                 <td th:text="${team.points}" style="text-align: right;"><b>5</b></td>
             </tr>
         </table>
@@ -49,6 +51,7 @@
                 <th>#</th>
                 <th style="text-align: center;">Team</th>
                 <th>+/-</th>
+                <th>G</th>
                 <th>Pts</th>
             </tr>
             <tr th:each="team,iter : ${tournament.boxes[1].teams}">
@@ -72,6 +75,7 @@
                     </div>
                 </td>
                 <td th:text="${team.goalsDelta}">11</td>
+                <td th:text="${team.gamesPlayed}">4</td>
                 <td th:text="${team.points}" style="text-align: right;"><b>5</b></td>
             </tr>
         </table>

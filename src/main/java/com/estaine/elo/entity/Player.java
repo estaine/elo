@@ -21,11 +21,18 @@ public class Player {
 
     private String lastName;
 
+    private String slackId;
+
     private String imChannel;
 
     public String getFullName() {
         return firstName + " " + lastName;
     }
+
+    public String getFormattedSlackId() {
+        return "<@" + slackId + ">";
+    }
+
 
     @Override
     public boolean equals(Object o) {

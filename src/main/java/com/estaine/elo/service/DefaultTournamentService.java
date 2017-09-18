@@ -47,8 +47,8 @@ public class DefaultTournamentService implements TournamentService {
     }
 
     @Override
-    public Tournament getBoxStats(Long tournamentId) {
-        Tournament tournament = tournamentRepository.findOne(tournamentId);
+    public Tournament getBoxStats() {
+        Tournament tournament = tournamentRepository.findByActiveTrue();
 
         if (tournament == null) {
             return null;

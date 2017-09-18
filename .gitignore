@@ -22,3 +22,7 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+### Tokens ###
+src/main/resources/tokens_dev.properties
+src/main/resources/tokens_prod.properties

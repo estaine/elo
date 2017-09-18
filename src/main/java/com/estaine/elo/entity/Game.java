@@ -56,7 +56,7 @@ public class Game {
     @Override
     public String toString() {
         return redTeamPlayer1.getUsername() + " & " + redTeamPlayer2.getUsername() + " vs "
-                + yellowTeamPlayer1 + " & " + yellowTeamPlayer2.getUsername() + " "
+                + yellowTeamPlayer1.getUsername() + " & " + yellowTeamPlayer2.getUsername() + " "
                 + redTeamGoals + ":" + yellowTeamGoals;
     }
 }
