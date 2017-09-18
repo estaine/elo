@@ -19,17 +19,15 @@ public class SlackController {
     public String registerMatch(@RequestParam String token, @RequestParam("channel_name") String channelName,
             @RequestParam("user_name") String userName, @RequestParam String text) {
 
-        System.out.println("Slack request received from @" + userName);
+        System.out.println("Slack /match request received from @" + userName);
         return gameService.registerMatch(userName, channelName, text, token);
     }
 
     @RequestMapping(value = "/group-match", method = RequestMethod.POST, headers = "Content-Type=application/x-www-form-urlencoded", consumes = {MediaType.ALL_VALUE})
-    public String registerTournamentMatch(@RequestParam String token, @RequestParam("team_id") String teamId, @RequestParam("team_domain") String teamDomain,
-            @RequestParam("channel_id") String channelId, @RequestParam("channel_name") String channelName,
-            @RequestParam("user_id") String userId, @RequestParam("user_name") String userName, @RequestParam String command,
-            @RequestParam String text, @RequestParam("response_url") String responseUrl, @RequestParam("trigger_id") String triggerId) {
+    public String registerTournamentMatch(@RequestParam String token, @RequestParam("channel_name") String channelName,
+            @RequestParam("user_name") String userName, @RequestParam String text) {
 
+        System.out.println("Slack /group-match request received from @" + userName);
         return gameService.registerGroupMatch(userName, channelName, text, token);
-
     }
 }
