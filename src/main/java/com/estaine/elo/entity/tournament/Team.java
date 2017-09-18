@@ -50,6 +50,11 @@ public class Team {
         }
     }
 
+    public boolean consistsOf(Player player1, Player player2) {
+        return (player1.equals(this.player1) && player2.equals(this.player2))
+                || (player1.equals(this.player2) && player2.equals(this.player1));
+    }
+
     @Override
     public String toString() {
         return "Team " + name + ": " + player1.getUsername() + ", " + player2.getUsername()

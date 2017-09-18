@@ -2,6 +2,7 @@ package com.estaine.elo.request;
 
 import com.estaine.elo.entity.Game;
 import com.estaine.elo.entity.Player;
+import com.estaine.elo.entity.tournament.BoxGame;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.SneakyThrows;
@@ -22,19 +23,22 @@ public class SlackNotifier {
     @Value("${kicker-bot-token}")
     private String kickerBotToken;
 
-    @SneakyThrows
     public void notifyMatchParticipants(Player requester, Game game) {
         String notification = buildMatchNotification(requester, game);
 
-        notifyMatchParticipant(game.getRedTeamPlayer1(), notification);
-        notifyMatchParticipant(game.getRedTeamPlayer2(), notification);
-        notifyMatchParticipant(game.getYellowTeamPlayer1(), notification);
-        notifyMatchParticipant(game.getYellowTeamPlayer2(), notification);
+        game.getAllParticipants()
+                .forEach(player -> notifySlackUser(player, notification));
+    }
 
+    public void notifyGroupMatchParticipants(Player requester, BoxGame boxGame) {
+        String notification = buildGroupMatchNotification(requester, boxGame);
+
+        boxGame.getAllParticipants()
+                .forEach(player -> notifySlackUser(player, notification));
     }
 
     @SneakyThrows
-    private void notifyMatchParticipant(Player notifyee, String notification) {
+    private void notifySlackUser(Player notifyee, String notification) {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             HttpPost httpPost = new HttpPost(SLACK_NOTIFY_URL);
 
@@ -56,5 +60,14 @@ public class SlackNotifier {
                 + game.getRedTeamPlayer1().getFormattedSlackId() + " " + game.getRedTeamPlayer2().getFormattedSlackId()
                 + " *" + game.getRedTeamGoals() + ":" + game.getYellowTeamGoals() + "* "
                 + game.getYellowTeamPlayer1().getFormattedSlackId() + " " + game.getYellowTeamPlayer2().getFormattedSlackId();
+    }
+
+    private String buildGroupMatchNotification(Player requester, BoxGame boxGame) {
+        return "*TEST DATABASE*\n"
+                + requester.getFormattedSlackId() + " has registered the following group match in tournament : *"
+                + boxGame.getBox().getTournament().getName() + "*\n"
+                + boxGame.getRedTeam().getPlayer1().getFormattedSlackId() + " " + boxGame.getRedTeam().getPlayer2().getFormattedSlackId()
+                + " *" + boxGame.getGame().getRedTeamGoals() + ":" + boxGame.getGame().getYellowTeamGoals() + "* "
+                + boxGame.getYellowTeam().getPlayer1().getFormattedSlackId() + " " + boxGame.getYellowTeam().getPlayer1().getFormattedSlackId();
     }
 }

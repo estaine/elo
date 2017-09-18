@@ -1,7 +1,9 @@
 package com.estaine.elo.entity;
 
 import com.estaine.elo.entity.tournament.BoxGame;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -52,6 +54,11 @@ public class Game {
     public boolean isTournamentGame() {
         return boxGame != null;
     }
+
+    public List<Player> getAllParticipants() {
+        return Arrays.asList(redTeamPlayer1, redTeamPlayer2, yellowTeamPlayer1, yellowTeamPlayer2);
+    }
+
 
     @Override
     public String toString() {

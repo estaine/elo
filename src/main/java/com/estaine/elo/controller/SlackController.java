@@ -23,14 +23,13 @@ public class SlackController {
         return gameService.registerMatch(userName, channelName, text, token);
     }
 
-    @RequestMapping(value = "/cup-match", method = RequestMethod.POST, headers = "Content-Type=application/x-www-form-urlencoded", consumes = {MediaType.ALL_VALUE})
+    @RequestMapping(value = "/group-match", method = RequestMethod.POST, headers = "Content-Type=application/x-www-form-urlencoded", consumes = {MediaType.ALL_VALUE})
     public String registerTournamentMatch(@RequestParam String token, @RequestParam("team_id") String teamId, @RequestParam("team_domain") String teamDomain,
             @RequestParam("channel_id") String channelId, @RequestParam("channel_name") String channelName,
             @RequestParam("user_id") String userId, @RequestParam("user_name") String userName, @RequestParam String command,
             @RequestParam String text, @RequestParam("response_url") String responseUrl, @RequestParam("trigger_id") String triggerId) {
 
-        //return gameService.registerTournamentMatch(userName, channelName, text, token);
-        return "Not implemented yet";
+        return gameService.registerGroupMatch(userName, channelName, text, token);
 
     }
 }
