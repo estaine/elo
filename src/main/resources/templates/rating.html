@@ -21,7 +21,7 @@
                  th:src="@{${'/userpics/' + playerStats.key.username + '.png'}}"/></td>
         <td><a th:href="'/player/' + ${playerStats.key.username}"><span th:text="${playerStats.key.fullName}"/></a></td>
         <td th:text="${playerStats.value.gamesPlayed}">11</td>
-        <td th:text="${#numbers.formatDecimal(playerStats.value.rating * 100, 0, 0)}"><b>133.05</b></td>
+        <td th:text="${#numbers.formatDecimal(playerStats.value.rating, 0, 0)}"><b>133.05</b></td>
     </tr>
 </table>
 
