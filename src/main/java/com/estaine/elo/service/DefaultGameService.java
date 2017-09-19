@@ -71,25 +71,41 @@ public class DefaultGameService implements GameService {
             Player red1 = playerRepository.findBySlackId(red1SlackId);
 
             if (red1 == null) {
-                return "No player with username " + red1SlackId + " was found in the DB";
+                red1 = playerRepository.findByUsername("@" + red1SlackId);
+
+                if(red1 == null) {
+                    return "No player with username " + red1SlackId + " was found in the DB";
+                }
             }
 
             Player red2 = playerRepository.findBySlackId(red2SlackId);
 
             if (red2 == null) {
-                return "No player with username " + red2SlackId + " was found in the DB";
+                red2 = playerRepository.findByUsername("@" + red2SlackId);
+
+                if(red2 == null) {
+                    return "No player with username " + red2SlackId + " was found in the DB";
+                }
             }
 
             Player yellow1 = playerRepository.findBySlackId(yellow1SlackId);
 
             if (yellow1 == null) {
-                return "No player with username " + yellow1SlackId + " was found in the DB";
+                yellow1 = playerRepository.findByUsername("@" + yellow1SlackId);
+
+                if(yellow1 == null) {
+                    return "No player with username " + yellow1SlackId + " was found in the DB";
+                }
             }
 
             Player yellow2 = playerRepository.findBySlackId(yellow2SlackId);
 
             if (yellow2 == null) {
-                return "No player with username " + yellow2SlackId + " was found in the DB";
+                yellow2 = playerRepository.findByUsername("@" + yellow2SlackId);
+
+                if(yellow2 == null) {
+                    return "No player with username " + yellow2SlackId + " was found in the DB";
+                }
             }
 
             String[] resultParts = requestParts[5].split(":");
