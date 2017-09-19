@@ -2,14 +2,11 @@ package com.estaine.elo.format;
 
 import com.estaine.elo.entity.Player;
 import com.estaine.elo.entity.PlayerStats;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class RatingFormatter {

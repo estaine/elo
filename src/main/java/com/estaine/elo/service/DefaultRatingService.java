@@ -5,11 +5,13 @@ import com.estaine.elo.entity.Player;
 import com.estaine.elo.entity.PlayerStats;
 import com.estaine.elo.repository.GameRepository;
 import com.estaine.elo.repository.PlayerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 
 @Service
 public class DefaultRatingService implements RatingService {
