@@ -2,7 +2,7 @@ package com.estaine.elo.service;
 
 import com.estaine.elo.entity.Game;
 import com.estaine.elo.entity.Player;
-import com.estaine.elo.entity.BaseStats;
+import com.estaine.elo.entity.PlayerStats;
 import com.estaine.elo.repository.GameRepository;
 import com.estaine.elo.repository.PlayerRepository;
 import java.util.HashMap;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class DefaultRatingService implements RatingService {
 
     private static final double TOURNAMENT_MULTIPLIER = 4.0 / 3.0;
-    private static final double INITIAL_RATING = 10_000.0;
     private static final double MAX_LOSING_PERCENTS = 8.0;
     private static final double GOAL_DECREASE_COEFF = 1.0 / 3.0;
 
@@ -26,15 +25,15 @@ public class DefaultRatingService implements RatingService {
     private GameRepository gameRepository;
 
     @Override
-    public Map<Player, BaseStats> calculateRatings() {
+    public Map<Player, PlayerStats> calculateRatings() {
 
         List<Player> players = playerRepository.findAll();
         List<Game> games = gameRepository.findAllByOrderByPlayedOnAsc();
 
-        Map<Player, BaseStats> ratings = new HashMap<>();
+        Map<Player, PlayerStats> statsMap = new HashMap<>();
 
         for(Player player : players) {
-            ratings.put(player, new BaseStats(INITIAL_RATING, 0));
+            statsMap.put(player, new PlayerStats(player));
         }
 
         for(Game game : games) {
@@ -49,15 +48,20 @@ public class DefaultRatingService implements RatingService {
             double losingPercents = multiplier * (MAX_LOSING_PERCENTS - (goalsAgainst * GOAL_DECREASE_COEFF));
 
 
-            double loser1Delta = ratings.get(loser1).getRating() * losingPercents / 100.0;
-            double loser2Delta = ratings.get(loser2).getRating() * losingPercents / 100.0;
+            double loser1Delta = statsMap.get(loser1).getBaseStats().getRating() * losingPercents / 100.0;
+            double loser2Delta = statsMap.get(loser2).getBaseStats().getRating() * losingPercents / 100.0;
 
-            ratings.get(winner1).updateRating(ratings.get(winner1).getRating() + (loser1Delta + loser2Delta) / 2.0);
-            ratings.get(winner2).updateRating(ratings.get(winner2).getRating() + (loser1Delta + loser2Delta) / 2.0);
-            ratings.get(loser1).updateRating(ratings.get(loser1).getRating() - loser1Delta);
-            ratings.get(loser2).updateRating(ratings.get(loser2).getRating() - loser2Delta);
+            statsMap.get(winner1).getBaseStats().updateRating(statsMap.get(winner1).getBaseStats().getRating() + (loser1Delta + loser2Delta) / 2.0);
+            statsMap.get(winner2).getBaseStats().updateRating(statsMap.get(winner2).getBaseStats().getRating() + (loser1Delta + loser2Delta) / 2.0);
+            statsMap.get(loser1).getBaseStats().updateRating(statsMap.get(loser1).getBaseStats().getRating() - loser1Delta);
+            statsMap.get(loser2).getBaseStats().updateRating(statsMap.get(loser2).getBaseStats().getRating() - loser2Delta);
+
+            statsMap.get(winner1).updateStats(game);
+            statsMap.get(winner2).updateStats(game);
+            statsMap.get(loser1).updateStats(game);
+            statsMap.get(loser2).updateStats(game);
         }
 
-        return ratings;
+        return statsMap;
     }
 }
