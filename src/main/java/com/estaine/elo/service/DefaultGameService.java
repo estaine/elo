@@ -11,6 +11,19 @@ import com.estaine.elo.repository.GameRepository;
 import com.estaine.elo.repository.PlayerRepository;
 import com.estaine.elo.repository.TournamentRepository;
 import com.estaine.elo.request.SlackNotifier;
+import com.estaine.elo.service.exception.BadRequestFormatException;
+import com.estaine.elo.service.exception.DrawResultException;
+import com.estaine.elo.service.exception.DuplicatingPlayerException;
+import com.estaine.elo.service.exception.IncompatibleTeamsException;
+import com.estaine.elo.service.exception.InvalidChannelException;
+import com.estaine.elo.service.exception.InvalidTokenException;
+import com.estaine.elo.service.exception.MatchAlreadyPlayedException;
+import com.estaine.elo.service.exception.MaxGoalsLimitExceededException;
+import com.estaine.elo.service.exception.NegativeGoalsCountException;
+import com.estaine.elo.service.exception.NoMatchScheduledException;
+import com.estaine.elo.service.exception.PlayerNotFoundException;
+import com.estaine.elo.service.exception.SlackRequestValidationException;
+import com.estaine.elo.service.exception.TeamNotFoundException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -24,6 +37,7 @@ import org.springframework.stereotype.Service;
 public class DefaultGameService implements GameService {
 
     private static final String ACCEPTED_CHANNEL_NAME = "by_kicker";
+    private static final String COMMON_ERROR_MESSAGE = "Something went wrong. Please pray to Allah and try again.";
 
     @Value("${slack-token}")
     private String slackToken;
@@ -45,226 +59,158 @@ public class DefaultGameService implements GameService {
 
     @Override
     public String registerMatch(String requesterUsername, String channelName, String request, String token) {
-        if (!slackToken.equals(token)) {
-            return "Wrong token. Did you send your request not from Slack?";
-        }
-
-        if (!ACCEPTED_CHANNEL_NAME.equals(channelName)) {
-            return "Matches can be only registered from channel #" + ACCEPTED_CHANNEL_NAME;
-        }
-
         try {
-
-            String[] requestParts = request.split(" ");
-
-            String red1SlackId = requestParts[0].replace("@", "");
-            String red2SlackId = requestParts[1].replace("@", "");
-            String yellow1SlackId = requestParts[3].replace("@", "");
-            String yellow2SlackId = requestParts[4].replace("@", "");
-
-            Set<String> slackIdSet = new HashSet<>(Arrays.asList(red1SlackId, red2SlackId, yellow1SlackId, yellow2SlackId));
-
-            if (slackIdSet.size() < 4) {
-                return "All players in match should be unique";
-            }
-
-            Player red1 = playerRepository.findBySlackId(red1SlackId);
-
-            if (red1 == null) {
-                red1 = playerRepository.findByUsername("@" + red1SlackId);
-
-                if(red1 == null) {
-                    return "No player with username " + red1SlackId + " was found in the DB";
-                }
-            }
-
-            Player red2 = playerRepository.findBySlackId(red2SlackId);
-
-            if (red2 == null) {
-                red2 = playerRepository.findByUsername("@" + red2SlackId);
-
-                if(red2 == null) {
-                    return "No player with username " + red2SlackId + " was found in the DB";
-                }
-            }
-
-            Player yellow1 = playerRepository.findBySlackId(yellow1SlackId);
-
-            if (yellow1 == null) {
-                yellow1 = playerRepository.findByUsername("@" + yellow1SlackId);
-
-                if(yellow1 == null) {
-                    return "No player with username " + yellow1SlackId + " was found in the DB";
-                }
-            }
-
-            Player yellow2 = playerRepository.findBySlackId(yellow2SlackId);
-
-            if (yellow2 == null) {
-                yellow2 = playerRepository.findByUsername("@" + yellow2SlackId);
-
-                if(yellow2 == null) {
-                    return "No player with username " + yellow2SlackId + " was found in the DB";
-                }
-            }
-
-            String[] resultParts = requestParts[5].split(":");
-            Integer redGoals = Integer.parseInt(resultParts[0]);
-            Integer yellowGoals = Integer.parseInt(resultParts[1]);
+            Game game = gameRepository.save(buildGame(channelName, request, token));
 
             Player requester = playerRepository.findByUsername("@" + requesterUsername);
-
-            if (Objects.equals(redGoals, yellowGoals)) {
-                return "Draws are not supported";
-            }
-
-            if ((redGoals > 10) || (yellowGoals > 10)) {
-                return "Goals count should be no more than 10 for each team";
-            }
-
-            if ((redGoals < 0) || (yellowGoals < 0)) {
-                return "Negative goals count? Really?..;";
-            }
-
-            Game game = new Game();
-            game.setRedTeamPlayer1(red1);
-            game.setRedTeamPlayer2(red2);
-            game.setYellowTeamPlayer1(yellow1);
-            game.setYellowTeamPlayer2(yellow2);
-            game.setRedTeamGoals(redGoals);
-            game.setYellowTeamGoals(yellowGoals);
-            game.setPlayedOn(new Date());
-
-            game = gameRepository.save(game);
-
             slackNotifier.notifyMatchParticipants(requester, game);
 
             return "Match registered";
+        } catch (SlackRequestValidationException e) {
+            return e.getMessage();
         } catch (Exception e) {
-            return "Bad request format. Please format your command according to the example";
+            return COMMON_ERROR_MESSAGE;
         }
     }
 
     @Override
     public String registerGroupMatch(String requesterUsername, String channelName, String request, String token) {
-        if (!slackToken.equals(token)) {
-            return "Wrong token. Did you send your request not from Slack?";
-        }
-
-        if (!ACCEPTED_CHANNEL_NAME.equals(channelName)) {
-            return "Matches can be only registered from channel #" + ACCEPTED_CHANNEL_NAME;
-        }
-
         try {
+            Game game = buildGame(channelName, request, token);
+            BoxGame boxGame = buildGroupGame(game);
 
-            String[] requestParts = request.split(" ");
-
-            String red1SlackId = requestParts[0].replace("@", "");
-            String red2SlackId = requestParts[1].replace("@", "");
-            String yellow1SlackId = requestParts[3].replace("@", "");
-            String yellow2SlackId = requestParts[4].replace("@", "");
-
-            Set<String> slackIdSet = new HashSet<>(Arrays.asList(red1SlackId, red2SlackId, yellow1SlackId, yellow2SlackId));
-
-            if (slackIdSet.size() < 4) {
-                return "All players in match should be unique";
-            }
-
-            Player red1 = playerRepository.findBySlackId(red1SlackId);
-
-            if (red1 == null) {
-                return "No player with username " + red1SlackId + " was found in the DB";
-            }
-
-            Player red2 = playerRepository.findBySlackId(red2SlackId);
-
-            if (red2 == null) {
-                return "No player with username " + red2SlackId + " was found in the DB";
-            }
-
-            Player yellow1 = playerRepository.findBySlackId(yellow1SlackId);
-
-            if (yellow1 == null) {
-                return "No player with username " + yellow1SlackId + " was found in the DB";
-            }
-
-            Player yellow2 = playerRepository.findBySlackId(yellow2SlackId);
-
-            if (yellow2 == null) {
-                return "No player with username " + yellow2SlackId + " was found in the DB";
-            }
-
-            String[] resultParts = requestParts[5].split(":");
-            Integer redGoals = Integer.parseInt(resultParts[0]);
-            Integer yellowGoals = Integer.parseInt(resultParts[1]);
-
-            Player requester = playerRepository.findByUsername("@" + requesterUsername);
-
-            if (Objects.equals(redGoals, yellowGoals)) {
-                return "Draws are not supported";
-            }
-
-            if ((redGoals > 10) || (yellowGoals > 10)) {
-                return "Goals count should be no more than 10 for each team";
-            }
-
-            if ((redGoals < 0) || (yellowGoals < 0)) {
-                return "Negative goals count? Really?..;";
-            }
-
-            Tournament tournament = tournamentRepository.findByActiveTrue();
-
-            Team redTeam = tournament.getTeams().stream().filter(t -> t.consistsOf(red1, red2)).findFirst().orElse(null);
-
-            if(redTeam == null) {
-                return "No team consisting of " + red1.getUsername() + " and " + red2.getUsername() + " found in current tournament";
-            }
-
-            Team yellowTeam = tournament.getTeams().stream().filter(t -> t.consistsOf(yellow1, yellow2)).findFirst().orElse(null);
-
-            if(yellowTeam == null) {
-                return "No team consisting of " + yellow1.getUsername() + " and " + yellow2.getUsername() + " found in current tournament";
-            }
-
-            if(!redTeam.getBox().getId().equals(yellowTeam.getBox().getId())) {
-                return "The specified teams belong to different groups. Try to register a common match instead.";
-            }
-
-            Box box = redTeam.getBox();
-
-            BoxGame boxGame = box.getBoxGames().stream()
-                    .filter(bg -> bg.consistsOf(redTeam, yellowTeam))
-                    .findFirst()
-                    .orElse(null);
-
-            if(boxGame == null) {
-                return "No match is planned between the specified teams. Perhaps the tournament is not started yet?";
-            }
-
-            if(boxGame.isPlayed()) {
-                return "The specified teams have already played a match";
-            }
-
-            Game game = new Game();
-            game.setRedTeamPlayer1(red1);
-            game.setRedTeamPlayer2(red2);
-            game.setYellowTeamPlayer1(yellow1);
-            game.setYellowTeamPlayer2(yellow2);
-            game.setRedTeamGoals(redGoals);
-            game.setYellowTeamGoals(yellowGoals);
-            game.setPlayedOn(new Date());
-
-            game = gameRepository.save(game);
-
-            boxGame.setGame(game);
-
+            gameRepository.save(game);
             boxGame = boxGameRepository.save(boxGame);
 
+            Player requester = playerRepository.findByUsername("@" + requesterUsername);
             slackNotifier.notifyGroupMatchParticipants(requester, boxGame);
 
             return "Group match registered";
+        } catch (SlackRequestValidationException e) {
+            return e.getMessage();
         } catch (Exception e) {
-            return "Bad request format. Please format your command according to the example";
+            return COMMON_ERROR_MESSAGE;
         }
+
+    }
+
+    private Game buildGame(String channelName, String request, String token) throws SlackRequestValidationException {
+        if (!slackToken.equals(token)) {
+            throw new InvalidTokenException();
+        }
+
+        if (!ACCEPTED_CHANNEL_NAME.equals(channelName)) {
+            throw new InvalidChannelException(ACCEPTED_CHANNEL_NAME);
+        }
+
+        String[] requestParts = request.split(" ");
+
+        if (requestParts.length != 6) {
+            throw new BadRequestFormatException();
+        }
+
+        String red1Name = requestParts[0];
+        String red2Name = requestParts[1];
+        String yellow1Name = requestParts[3];
+        String yellow2Name = requestParts[4];
+
+        Set<String> nameSet = new HashSet<>(Arrays.asList(red1Name, red2Name, yellow1Name, yellow2Name));
+
+        if (nameSet.size() < 4) {
+            throw new DuplicatingPlayerException();
+        }
+
+        Player red1 = findPlayerInDB(red1Name);
+        Player red2 = findPlayerInDB(red2Name);
+        Player yellow1 = findPlayerInDB(yellow1Name);
+        Player yellow2 = findPlayerInDB(yellow2Name);
+        String[] resultParts = requestParts[5].split(":");
+
+        if (resultParts.length != 2) {
+            throw new BadRequestFormatException();
+        }
+
+        Integer redGoals, yellowGoals;
+
+        try {
+            redGoals = Integer.parseInt(resultParts[0]);
+            yellowGoals = Integer.parseInt(resultParts[1]);
+        } catch (NumberFormatException e) {
+            throw new BadRequestFormatException();
+        }
+
+        if (Objects.equals(redGoals, yellowGoals)) {
+            throw new DrawResultException();
+        }
+
+        if ((redGoals > 10) || (yellowGoals > 10)) {
+            throw new MaxGoalsLimitExceededException();
+        }
+
+        if ((redGoals < 0) || (yellowGoals < 0)) {
+            throw new NegativeGoalsCountException();
+        }
+
+        Game game = new Game();
+        game.setRedTeamPlayer1(red1);
+        game.setRedTeamPlayer2(red2);
+        game.setYellowTeamPlayer1(yellow1);
+        game.setYellowTeamPlayer2(yellow2);
+        game.setRedTeamGoals(redGoals);
+        game.setYellowTeamGoals(yellowGoals);
+        game.setPlayedOn(new Date());
+
+        return game;
+    }
+
+    private BoxGame buildGroupGame(Game game) throws SlackRequestValidationException {
+        Tournament tournament = tournamentRepository.findByActiveTrue();
+
+        Team redTeam = buildTeam(tournament, game.getRedTeamPlayer1(), game.getRedTeamPlayer2());
+        Team yellowTeam = buildTeam(tournament, game.getYellowTeamPlayer1(), game.getYellowTeamPlayer2());
+
+        if (!redTeam.getBox().getId().equals(yellowTeam.getBox().getId())) {
+            throw new IncompatibleTeamsException();
+        }
+
+        Box box = redTeam.getBox();
+
+        BoxGame boxGame = box.getBoxGames().stream()
+                .filter(bg -> bg.consistsOf(redTeam, yellowTeam))
+                .findFirst()
+                .orElse(null);
+
+        if (boxGame == null) {
+            throw new NoMatchScheduledException();
+        }
+
+        if (boxGame.isPlayed()) {
+            throw new MatchAlreadyPlayedException();
+        }
+
+        boxGame.setGame(game);
+
+        return boxGame;
+    }
+
+    private Player findPlayerInDB(String username) throws PlayerNotFoundException {
+        Player player = playerRepository.findByUsername(username);
+
+        if (player == null) {
+            player = playerRepository.findBySlackId(username.replace("@", ""));
+
+            if (player == null) {
+                throw new PlayerNotFoundException(username);
+            }
+        }
+
+        return player;
+    }
+
+    private Team buildTeam(Tournament tournament, Player player1, Player player2) throws TeamNotFoundException {
+        return tournament.getTeams().stream()
+                .filter(t -> t.consistsOf(player1, player2))
+                .findFirst()
+                .orElseThrow(() -> new TeamNotFoundException(player1, player2));
     }
 }
