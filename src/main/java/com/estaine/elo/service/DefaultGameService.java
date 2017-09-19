@@ -60,9 +60,10 @@ public class DefaultGameService implements GameService {
     @Override
     public String registerMatch(String requesterUsername, String channelName, String request, String token) {
         try {
-            Game game = gameRepository.save(buildGame(channelName, request, token));
+            String slackFormattedRequesterUsername = "@" + requesterUsername;
+            Game game = gameRepository.save(buildGame(channelName, request, token, slackFormattedRequesterUsername));
 
-            Player requester = playerRepository.findByUsername("@" + requesterUsername);
+            Player requester = playerRepository.findByUsername(slackFormattedRequesterUsername);
             slackNotifier.notifyMatchParticipants(requester, game);
 
             return "Match registered";
@@ -76,13 +77,14 @@ public class DefaultGameService implements GameService {
     @Override
     public String registerGroupMatch(String requesterUsername, String channelName, String request, String token) {
         try {
-            Game game = buildGame(channelName, request, token);
+            String slackFormattedRequesterUsername = "@" + requesterUsername;
+            Game game = buildGame(channelName, request, token, slackFormattedRequesterUsername);
             BoxGame boxGame = buildGroupGame(game);
 
             gameRepository.save(game);
             boxGame = boxGameRepository.save(boxGame);
 
-            Player requester = playerRepository.findByUsername("@" + requesterUsername);
+            Player requester = playerRepository.findByUsername(slackFormattedRequesterUsername);
             slackNotifier.notifyGroupMatchParticipants(requester, boxGame);
 
             return "Group match registered";
@@ -94,7 +96,7 @@ public class DefaultGameService implements GameService {
 
     }
 
-    private Game buildGame(String channelName, String request, String token) throws SlackRequestValidationException {
+    private Game buildGame(String channelName, String request, String token, String requesterUsername) throws SlackRequestValidationException {
         if (!slackToken.equals(token)) {
             throw new InvalidTokenException();
         }
@@ -159,6 +161,7 @@ public class DefaultGameService implements GameService {
         game.setRedTeamGoals(redGoals);
         game.setYellowTeamGoals(yellowGoals);
         game.setPlayedOn(new Date());
+        game.setReportedBy(requesterUsername);
 
         return game;
     }

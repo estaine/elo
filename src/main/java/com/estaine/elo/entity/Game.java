@@ -51,6 +51,8 @@ public class Game {
     @Temporal(TemporalType.TIMESTAMP)
     private Date playedOn;
 
+    private String reportedBy;
+
     public boolean isTournamentGame() {
         return boxGame != null;
     }

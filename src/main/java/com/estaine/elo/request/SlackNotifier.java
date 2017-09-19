@@ -55,19 +55,17 @@ public class SlackNotifier {
     }
 
     private String buildMatchNotification(Player requester, Game game) {
-        return "*TEST DATABASE*\n"
-                + requester.getFormattedSlackId() + " has registered the following match:\n"
+        return requester.getFormattedSlackId() + " has registered the following match:\n"
                 + game.getRedTeamPlayer1().getFormattedSlackId() + " " + game.getRedTeamPlayer2().getFormattedSlackId()
                 + " *" + game.getRedTeamGoals() + ":" + game.getYellowTeamGoals() + "* "
                 + game.getYellowTeamPlayer1().getFormattedSlackId() + " " + game.getYellowTeamPlayer2().getFormattedSlackId();
     }
 
     private String buildGroupMatchNotification(Player requester, BoxGame boxGame) {
-        return "*TEST DATABASE*\n"
-                + requester.getFormattedSlackId() + " has registered the following group match in tournament : *"
+        return requester.getFormattedSlackId() + " has registered the following group match in tournament : *"
                 + boxGame.getBox().getTournament().getName() + "*\n"
                 + boxGame.getRedTeam().getPlayer1().getFormattedSlackId() + " " + boxGame.getRedTeam().getPlayer2().getFormattedSlackId()
                 + " *" + boxGame.getGame().getRedTeamGoals() + ":" + boxGame.getGame().getYellowTeamGoals() + "* "
-                + boxGame.getYellowTeam().getPlayer1().getFormattedSlackId() + " " + boxGame.getYellowTeam().getPlayer1().getFormattedSlackId();
+                + boxGame.getYellowTeam().getPlayer1().getFormattedSlackId() + " " + boxGame.getYellowTeam().getPlayer2().getFormattedSlackId();
     }
 }
