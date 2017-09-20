@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Player stats - <span th:text="${playerStats.player.fullName}"></span></title>
+    <title th:text="${'Player stats - ' + playerStats.player.fullName}">Player stats - John Lennon</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" th:href="@{/css/rating.css}"
           href="../../css/rating.css"/>
@@ -60,7 +60,11 @@
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
                          th:src="@{${'/userpics/' + game.redTeamPlayer2.username + '.png'}}"/>
                 </td>
-                <td th:classappend="${playerStats.results[__${game.id}__]} ? score-win : score-lose" th:text="${game.redTeamGoals + ' : ' + game.yellowTeamGoals}">5:10</td>
+                <td th:classappend="${playerStats.results[__${game.id}__]} ? score-win : score-lose">
+                    <div th:text="${game.redTeamGoals + ' : ' + game.yellowTeamGoals}" style="text-align: center;">5:10</div>
+                    <div th:text="${(playerStats.results[__${game.id}__] ? '+ ' : '– ') + #numbers.formatDecimal(playerStats.ratingDelta[__${game.id}__], 0, 0)}"
+                         style="text-align: center; font-size: 8pt;">+503</div>
+                </td>
                 <td>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
                          th:src="@{${'/userpics/' + game.yellowTeamPlayer1.username + '.png'}}"/>

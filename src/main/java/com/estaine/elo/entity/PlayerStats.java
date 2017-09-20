@@ -14,6 +14,7 @@ public class PlayerStats {
     private Integer goalsAgainst;
     private BaseStats baseStats;
     private Map<Long, Boolean> results;
+    private Map<Long, Double> ratingDelta;
 
     public PlayerStats(Player player) {
         this.player = player;
@@ -22,6 +23,7 @@ public class PlayerStats {
         this.goalsAgainst = 0;
         this.baseStats = new BaseStats();
         this.results = new HashMap<>();
+        this.ratingDelta = new HashMap<>();
     }
 
     public void updateStats(Game game) {
