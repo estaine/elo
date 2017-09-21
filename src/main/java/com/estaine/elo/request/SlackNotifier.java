@@ -32,28 +32,30 @@ public class SlackNotifier {
     }
 
     @Async
-    public void notifyMatchParticipants(Player requester, Game game) {
+    public void sendCommonMatchNotifications(Player requester, Game game) {
         String notification = buildMatchNotification(requester, game);
-
-        game.getAllParticipants()
-                .forEach(player -> notifySlackUser(player, notification));
+        notifyPlayersAndChannel(notification, game.getAllParticipants());
     }
 
-    public void notifyGroupMatchParticipants(Player requester, BoxGame boxGame) {
+    @Async
+    public void sendGroupMatchNotifications(Player requester, BoxGame boxGame) {
         String notification = buildGroupMatchNotification(requester, boxGame);
+        notifyPlayersAndChannel(notification, boxGame.getAllParticipants());
+    }
 
-        boxGame.getAllParticipants()
-                .forEach(player -> notifySlackUser(player, notification));
+    private void notifyPlayersAndChannel(String notification, List<Player> players) {
+        players.forEach(player -> sendSlackMessage(player.getImChannel(), notification));
+        sendSlackMessage(properties.getChannelId(), notification);
     }
 
     @SneakyThrows
-    private void notifySlackUser(Player notifyee, String notification) {
+    private void sendSlackMessage(String conversationId, String notification) {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             HttpPost httpPost = new HttpPost(SLACK_NOTIFY_URL);
 
             List<NameValuePair> params = new ArrayList<>();
             params.add(new BasicNameValuePair("token", properties.getToken()));
-            params.add(new BasicNameValuePair("channel", notifyee.getImChannel()));
+            params.add(new BasicNameValuePair("channel", conversationId));
             params.add(new BasicNameValuePair("text", notification));
             params.add(new BasicNameValuePair("as_user", "false"));
             params.add(new BasicNameValuePair("pretty", "1"));

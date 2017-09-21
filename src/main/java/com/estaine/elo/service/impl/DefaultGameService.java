@@ -27,7 +27,6 @@ import java.util.Set;
 @Service
 public class DefaultGameService implements GameService {
 
-    private static final String ACCEPTED_CHANNEL_NAME = "by_kicker";
     private static final String COMMON_ERROR_MESSAGE = "Something went wrong. Please pray to Allah and try again.";
 
     private final PlayerRepository playerRepository;
@@ -64,7 +63,7 @@ public class DefaultGameService implements GameService {
             Game game = gameRepository.save(buildGame(channelName, request, token, slackFormattedRequesterUsername));
 
             Player requester = playerRepository.findByUsername(slackFormattedRequesterUsername);
-            slackNotifier.notifyMatchParticipants(requester, game);
+            slackNotifier.sendCommonMatchNotifications(requester, game);
 
             return "Match registered";
         } catch (SlackRequestValidationException e) {
@@ -85,7 +84,7 @@ public class DefaultGameService implements GameService {
             boxGame = boxGameRepository.save(boxGame);
 
             Player requester = playerRepository.findByUsername(slackFormattedRequesterUsername);
-            slackNotifier.notifyGroupMatchParticipants(requester, boxGame);
+            slackNotifier.sendGroupMatchNotifications(requester, boxGame);
 
             return "Group match registered";
         } catch (SlackRequestValidationException e) {
@@ -101,8 +100,8 @@ public class DefaultGameService implements GameService {
             throw new InvalidTokenException();
         }
 
-        if (!ACCEPTED_CHANNEL_NAME.equals(channelName)) {
-            throw new InvalidChannelException(ACCEPTED_CHANNEL_NAME);
+        if (!slackProperties.getChannelName().equals(channelName)) {
+            throw new InvalidChannelException(slackProperties.getChannelName());
         }
 
         String[] requestParts = request.split(" ");
