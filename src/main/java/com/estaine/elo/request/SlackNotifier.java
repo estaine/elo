@@ -3,8 +3,8 @@ package com.estaine.elo.request;
 import com.estaine.elo.entity.Game;
 import com.estaine.elo.entity.Player;
 import com.estaine.elo.entity.tournament.BoxGame;
-import java.util.ArrayList;
-import java.util.List;
+import com.estaine.elo.properties.SlackProperties;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -12,17 +12,26 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class SlackNotifier {
 
     private static final String SLACK_NOTIFY_URL = "https://slack.com/api/chat.postMessage";
 
-    @Value("${kicker-bot-token}")
-    private String kickerBotToken;
+    private final SlackProperties properties;
 
+    @Autowired
+    public SlackNotifier(@NonNull SlackProperties properties) {
+        this.properties = properties;
+    }
+
+    @Async
     public void notifyMatchParticipants(Player requester, Game game) {
         String notification = buildMatchNotification(requester, game);
 
@@ -43,7 +52,7 @@ public class SlackNotifier {
             HttpPost httpPost = new HttpPost(SLACK_NOTIFY_URL);
 
             List<NameValuePair> params = new ArrayList<>();
-            params.add(new BasicNameValuePair("token", kickerBotToken));
+            params.add(new BasicNameValuePair("token", properties.getToken()));
             params.add(new BasicNameValuePair("channel", notifyee.getImChannel()));
             params.add(new BasicNameValuePair("text", notification));
             params.add(new BasicNameValuePair("as_user", "false"));

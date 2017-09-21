@@ -6,6 +6,7 @@ import com.estaine.elo.format.RatingFormatter;
 import com.estaine.elo.service.PlayerStatsService;
 import com.estaine.elo.service.RatingService;
 import com.estaine.elo.service.TournamentService;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,23 +17,27 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class WebController {
 
-    @Autowired
-    private RatingService ratingService;
+    private final RatingService ratingService;
+    private final TournamentService tournamentService;
+    private final PlayerStatsService playerStatsService;
+    private final GroupStatsFormatter groupStatsFormatter;
+    private final PlayerStatsFormatter playerStatsFormatter;
+    private final RatingFormatter ratingFormatter;
 
     @Autowired
-    private TournamentService tournamentService;
-
-    @Autowired
-    private PlayerStatsService playerStatsService;
-
-    @Autowired
-    private GroupStatsFormatter groupStatsFormatter;
-
-    @Autowired
-    private PlayerStatsFormatter playerStatsFormatter;
-
-    @Autowired
-    private RatingFormatter ratingFormatter;
+    public WebController(@NonNull RatingService ratingService,
+                         @NonNull TournamentService tournamentService,
+                         @NonNull PlayerStatsService playerStatsService,
+                         @NonNull GroupStatsFormatter groupStatsFormatter,
+                         @NonNull PlayerStatsFormatter playerStatsFormatter,
+                         @NonNull RatingFormatter ratingFormatter) {
+        this.ratingService = ratingService;
+        this.tournamentService = tournamentService;
+        this.playerStatsService = playerStatsService;
+        this.groupStatsFormatter = groupStatsFormatter;
+        this.playerStatsFormatter = playerStatsFormatter;
+        this.ratingFormatter = ratingFormatter;
+    }
 
     @RequestMapping(value = {"/", "/rating"}, method = RequestMethod.GET)
     public String getRatings(Model model) {

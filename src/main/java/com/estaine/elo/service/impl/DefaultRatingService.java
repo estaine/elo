@@ -1,10 +1,12 @@
-package com.estaine.elo.service;
+package com.estaine.elo.service.impl;
 
 import com.estaine.elo.entity.Game;
 import com.estaine.elo.entity.Player;
 import com.estaine.elo.entity.PlayerStats;
 import com.estaine.elo.repository.GameRepository;
 import com.estaine.elo.repository.PlayerRepository;
+import com.estaine.elo.service.RatingService;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +22,14 @@ public class DefaultRatingService implements RatingService {
     private static final double MAX_LOSING_PERCENTS = 8.0;
     private static final double GOAL_DECREASE_COEFF = 1.0 / 3.0;
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
+    private final GameRepository gameRepository;
 
     @Autowired
-    private GameRepository gameRepository;
+    public DefaultRatingService(@NonNull PlayerRepository playerRepository, @NonNull GameRepository gameRepository) {
+        this.playerRepository = playerRepository;
+        this.gameRepository = gameRepository;
+    }
 
     @Override
     public Map<Player, PlayerStats> calculateRatings() {

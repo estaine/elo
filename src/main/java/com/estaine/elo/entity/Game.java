@@ -1,29 +1,19 @@
 package com.estaine.elo.entity;
 
 import com.estaine.elo.entity.tournament.BoxGame;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import lombok.Data;
 
 @Data
-@Entity
-public class Game {
+@EqualsAndHashCode(callSuper = true)
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "game_gen")
-    @SequenceGenerator(name = "game_gen", sequenceName = "game_id_seq")
-    private Long id;
+@Entity
+public class Game extends BaseModel {
 
     @ManyToOne
     @JoinColumn(name = "red_team_p1_id")

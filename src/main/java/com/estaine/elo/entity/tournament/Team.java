@@ -1,24 +1,20 @@
 package com.estaine.elo.entity.tournament;
 
+import com.estaine.elo.entity.BaseModel;
 import com.estaine.elo.entity.Player;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
-import lombok.Data;
 
 @Data
-@Entity
-public class Team {
+@EqualsAndHashCode(callSuper = true)
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "team_gen")
-    @SequenceGenerator(name = "team_gen", sequenceName = "team_id_seq")
-    private Long id;
+@Entity
+public class Team extends BaseModel {
 
     @ManyToOne
     @JoinColumn(name = "p1_id")
