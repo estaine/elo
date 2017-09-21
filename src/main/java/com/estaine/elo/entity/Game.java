@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -38,9 +38,8 @@ public class Game extends BaseModel {
     @OneToOne(mappedBy = "game", fetch = FetchType.EAGER)
     private BoxGame boxGame;
 
-    @Column(name = "played_on", columnDefinition="DATETIME")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date playedOn;
+    @Column(name = "played_on")
+    private LocalDateTime playedOn;
 
     private String reportedBy;
 

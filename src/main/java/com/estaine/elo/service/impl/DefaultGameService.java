@@ -18,7 +18,11 @@ import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class DefaultGameService implements GameService {
@@ -156,7 +160,7 @@ public class DefaultGameService implements GameService {
         game.setYellowTeamPlayer2(yellow2);
         game.setRedTeamGoals(redGoals);
         game.setYellowTeamGoals(yellowGoals);
-        game.setPlayedOn(new Date());
+        game.setPlayedOn(LocalDateTime.now());
         game.setReportedBy(requesterUsername);
 
         return game;
