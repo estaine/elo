@@ -1,20 +1,19 @@
 package com.estaine.elo.entity.tournament;
 
-import java.util.List;
+import com.estaine.elo.entity.BaseModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import lombok.Data;
+import java.util.List;
 
 @Data
-@Entity
-public class Box {
+@EqualsAndHashCode(callSuper = true)
 
-    @Id
-    @GeneratedValue
-    private Long id;
+@Entity
+public class Box extends BaseModel {
 
     private String name;
 

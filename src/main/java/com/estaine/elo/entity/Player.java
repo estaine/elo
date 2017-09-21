@@ -1,31 +1,32 @@
 package com.estaine.elo.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
 @Data
-@Entity
 @NoArgsConstructor
-@Table(name="player")
-public class Player {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+@Entity
+public class Player extends BaseModel {
 
+    @Column(nullable = false, unique = true)
     private String username;
 
+    @Column
     private String firstName;
 
+    @Column
     private String lastName;
 
+    @Column
     private String slackId;
 
+    @Column
     private String imChannel;
+
 
     public String getFullName() {
         return firstName + " " + lastName;
