@@ -8,10 +8,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import lombok.Data;
 
 @Data
@@ -19,7 +21,8 @@ import lombok.Data;
 public class Game {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "game_gen")
+    @SequenceGenerator(name = "game_gen", sequenceName = "game_id_seq")
     private Long id;
 
     @ManyToOne

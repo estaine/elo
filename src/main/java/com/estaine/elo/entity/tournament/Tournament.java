@@ -3,8 +3,10 @@ package com.estaine.elo.entity.tournament;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import lombok.Data;
 
 @Data
@@ -12,7 +14,8 @@ import lombok.Data;
 public class Tournament {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "tournament_gen")
+    @SequenceGenerator(name = "tournament_gen", sequenceName = "tournament_id_seq")
     private Long id;
 
     private String name;

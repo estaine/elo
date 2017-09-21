@@ -2,7 +2,9 @@ package com.estaine.elo.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +16,8 @@ import lombok.NoArgsConstructor;
 public class Player {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "player_gen")
+    @SequenceGenerator(name = "player_gen", sequenceName = "player_id_seq")
     private Long id;
 
     private String username;
