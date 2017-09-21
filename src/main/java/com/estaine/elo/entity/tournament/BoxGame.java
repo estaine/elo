@@ -1,32 +1,22 @@
 package com.estaine.elo.entity.tournament;
 
+import com.estaine.elo.entity.BaseModel;
 import com.estaine.elo.entity.Game;
-
 import com.estaine.elo.entity.Player;
-import java.util.Arrays;
-import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-
-import javax.persistence.SequenceGenerator;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Data
-@Entity
-@NoArgsConstructor
-public class BoxGame {
+import javax.persistence.*;
+import java.util.Arrays;
+import java.util.List;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "box_game_gen")
-    @SequenceGenerator(name = "box_game_gen", sequenceName = "box_game_id_seq")
-    private Long id;
+@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+
+@Entity
+public class BoxGame extends BaseModel {
 
     @ManyToOne
     @JoinColumn(name = "red_team_id")
