@@ -1,6 +1,7 @@
 package com.estaine.elo.controller;
 
 import com.estaine.elo.service.GameService;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/slack")
 public class SlackController {
 
+    private final GameService gameService;
+
     @Autowired
-    private GameService gameService;
+    public SlackController(@NonNull GameService gameService) {
+        this.gameService = gameService;
+    }
 
     @RequestMapping(value = "/match", method = RequestMethod.POST, headers = "Content-Type=application/x-www-form-urlencoded", consumes = {MediaType.ALL_VALUE})
     public String registerMatch(@RequestParam String token, @RequestParam("channel_name") String channelName,
