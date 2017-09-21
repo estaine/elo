@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 @ConfigurationProperties(prefix = "slack", ignoreUnknownFields = false)
 @Component
 @Validated
-@PropertySource("classpath:slack.properties")
 public class SlackProperties {
 
     @NotNull
