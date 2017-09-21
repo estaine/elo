@@ -24,8 +24,8 @@ import com.estaine.elo.service.exception.NoMatchScheduledException;
 import com.estaine.elo.service.exception.PlayerNotFoundException;
 import com.estaine.elo.service.exception.SlackRequestValidationException;
 import com.estaine.elo.service.exception.TeamNotFoundException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -160,7 +160,7 @@ public class DefaultGameService implements GameService {
         game.setYellowTeamPlayer2(yellow2);
         game.setRedTeamGoals(redGoals);
         game.setYellowTeamGoals(yellowGoals);
-        game.setPlayedOn(new Date());
+        game.setPlayedOn(LocalDateTime.now());
         game.setReportedBy(requesterUsername);
 
         return game;
