@@ -1,25 +1,31 @@
-package com.estaine.elo.service;
+package com.estaine.elo.service.impl;
 
 import com.estaine.elo.entity.tournament.Box;
 import com.estaine.elo.entity.tournament.BoxGame;
 import com.estaine.elo.entity.tournament.Tournament;
 import com.estaine.elo.repository.BoxGameRepository;
 import com.estaine.elo.repository.TournamentRepository;
+import com.estaine.elo.service.TournamentService;
+import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 @Service
 public class DefaultTournamentService implements TournamentService {
 
-    @Autowired
-    private TournamentRepository tournamentRepository;
+    private final TournamentRepository tournamentRepository;
+    private final BoxGameRepository boxGameRepository;
 
     @Autowired
-    private BoxGameRepository boxGameRepository;
+    public DefaultTournamentService(@NonNull TournamentRepository tournamentRepository,
+                                    @NonNull BoxGameRepository boxGameRepository) {
+        this.tournamentRepository = tournamentRepository;
+        this.boxGameRepository = boxGameRepository;
+    }
 
     @Override
     public void startGroupStage(Long tournamentId) {

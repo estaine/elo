@@ -1,4 +1,4 @@
-package com.estaine.elo.service;
+package com.estaine.elo.service.impl;
 
 import com.estaine.elo.entity.Game;
 import com.estaine.elo.entity.Player;
@@ -6,32 +6,19 @@ import com.estaine.elo.entity.tournament.Box;
 import com.estaine.elo.entity.tournament.BoxGame;
 import com.estaine.elo.entity.tournament.Team;
 import com.estaine.elo.entity.tournament.Tournament;
+import com.estaine.elo.properties.SlackProperties;
 import com.estaine.elo.repository.BoxGameRepository;
 import com.estaine.elo.repository.GameRepository;
 import com.estaine.elo.repository.PlayerRepository;
 import com.estaine.elo.repository.TournamentRepository;
 import com.estaine.elo.request.SlackNotifier;
-import com.estaine.elo.service.exception.BadRequestFormatException;
-import com.estaine.elo.service.exception.DrawResultException;
-import com.estaine.elo.service.exception.DuplicatingPlayerException;
-import com.estaine.elo.service.exception.IncompatibleTeamsException;
-import com.estaine.elo.service.exception.InvalidChannelException;
-import com.estaine.elo.service.exception.InvalidTokenException;
-import com.estaine.elo.service.exception.MatchAlreadyPlayedException;
-import com.estaine.elo.service.exception.MaxGoalsLimitExceededException;
-import com.estaine.elo.service.exception.NegativeGoalsCountException;
-import com.estaine.elo.service.exception.NoMatchScheduledException;
-import com.estaine.elo.service.exception.PlayerNotFoundException;
-import com.estaine.elo.service.exception.SlackRequestValidationException;
-import com.estaine.elo.service.exception.TeamNotFoundException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import com.estaine.elo.service.GameService;
+import com.estaine.elo.service.exception.*;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 public class DefaultGameService implements GameService {
@@ -39,23 +26,32 @@ public class DefaultGameService implements GameService {
     private static final String ACCEPTED_CHANNEL_NAME = "by_kicker";
     private static final String COMMON_ERROR_MESSAGE = "Something went wrong. Please pray to Allah and try again.";
 
-    @Value("${slack-token}")
-    private String slackToken;
+    private final PlayerRepository playerRepository;
+    private final GameRepository gameRepository;
+    private final BoxGameRepository boxGameRepository;
+    private final TournamentRepository tournamentRepository;
+    private final SlackNotifier slackNotifier;
+
+    /**
+     * @deprecated Must be moved to the controller
+     */
+    @Deprecated
+    private final SlackProperties slackProperties;
 
     @Autowired
-    private PlayerRepository playerRepository;
-
-    @Autowired
-    private GameRepository gameRepository;
-
-    @Autowired
-    private BoxGameRepository boxGameRepository;
-
-    @Autowired
-    private TournamentRepository tournamentRepository;
-
-    @Autowired
-    private SlackNotifier slackNotifier;
+    public DefaultGameService(@NonNull PlayerRepository playerRepository,
+                              @NonNull GameRepository gameRepository,
+                              @NonNull BoxGameRepository boxGameRepository,
+                              @NonNull TournamentRepository tournamentRepository,
+                              @NonNull SlackNotifier slackNotifier,
+                              @NonNull SlackProperties slackProperties) {
+        this.playerRepository = playerRepository;
+        this.gameRepository = gameRepository;
+        this.boxGameRepository = boxGameRepository;
+        this.tournamentRepository = tournamentRepository;
+        this.slackNotifier = slackNotifier;
+        this.slackProperties = slackProperties;
+    }
 
     @Override
     public String registerMatch(String requesterUsername, String channelName, String request, String token) {
@@ -97,7 +93,7 @@ public class DefaultGameService implements GameService {
     }
 
     private Game buildGame(String channelName, String request, String token, String requesterUsername) throws SlackRequestValidationException {
-        if (!slackToken.equals(token)) {
+        if (!slackProperties.getSecretKey().equals(token)) {
             throw new InvalidTokenException();
         }
 
