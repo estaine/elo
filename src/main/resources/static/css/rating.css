@@ -47,6 +47,7 @@
 }
 
 body {
+  margin-top: 0;
   padding: 0 2em;
   font-family: Montserrat, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -114,4 +115,13 @@ a:active {
 
 .score-win {
   color: #3cff3c;
+}
+
+.navigation {
+  margin: auto;
+  width: 100%;
+  text-align: center;
+  background-color: #34495E;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
