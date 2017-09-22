@@ -21,4 +21,13 @@ public class BaseStats {
         this.rating = rating;
         gamesPlayed++;
     }
+
+    public BaseStats subtract(BaseStats baseStats) {
+        BaseStats diff = new BaseStats();
+
+        diff.rating = this.rating - baseStats.rating;
+        diff.gamesPlayed = this.gamesPlayed - baseStats.gamesPlayed;
+
+        return diff;
+    }
 }

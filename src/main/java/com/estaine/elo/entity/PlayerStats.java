@@ -46,4 +46,23 @@ public class PlayerStats {
             goalsAgainst += game.getRedTeamGoals();
         }
     }
+
+    public PlayerStats subtract(PlayerStats playerStats) {
+        PlayerStats diff = new PlayerStats(this.player);
+
+        diff.games.addAll(this.games);
+        diff.games.removeAll(playerStats.games);
+
+        diff.goalsFor = this.goalsFor - playerStats.goalsFor;
+        diff.goalsAgainst = this.goalsAgainst - playerStats.goalsAgainst;
+        diff.baseStats = this.baseStats.subtract(playerStats.baseStats);
+
+        this.results.forEach(diff.results::putIfAbsent);
+        playerStats.results.forEach(diff.results::remove);
+
+        this.ratingDelta.forEach(diff.ratingDelta::putIfAbsent);
+        playerStats.ratingDelta.forEach(diff.ratingDelta::remove);
+
+        return diff;
+    }
 }

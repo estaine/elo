@@ -1,6 +1,7 @@
 package com.estaine.elo.entity;
 
 import com.estaine.elo.entity.tournament.BoxGame;
+import java.time.format.DateTimeFormatter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,6 +15,8 @@ import java.util.List;
 
 @Entity
 public class Game extends BaseModel {
+
+    private static final String DATE_TIME_FORMAT = "E, dd-MMM-yyyy, HH:mm";
 
     @ManyToOne
     @JoinColumn(name = "red_team_p1_id")
@@ -54,8 +57,10 @@ public class Game extends BaseModel {
 
     @Override
     public String toString() {
-        return redTeamPlayer1.getUsername() + " & " + redTeamPlayer2.getUsername() + " vs "
-                + yellowTeamPlayer1.getUsername() + " & " + yellowTeamPlayer2.getUsername() + " "
-                + redTeamGoals + ":" + yellowTeamGoals;
+        return redTeamPlayer1.getUsername() + " & " + redTeamPlayer2.getUsername()
+                + " " + redTeamGoals + ":" + yellowTeamGoals + " "
+                + yellowTeamPlayer1.getUsername() + " & " + yellowTeamPlayer2.getUsername()
+                + " [" + playedOn.format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)) + "]";
+
     }
 }
