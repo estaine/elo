@@ -19,7 +19,7 @@
                 <th>G</th>
                 <th>Pts</th>
             </tr>
-            <tr th:each="team,iter : ${tournament.boxes[0].teams}">
+            <tr th:each="team,iter : ${tournament.groups[0].teams}">
                 <td th:text="${iter.index + 1}">1</td>
                 <!--<td th:text="${team.displayName}" style="color: #ecec3c; font-size: 11pt;">John Hopkins</td>-->
                 <td>
@@ -40,7 +40,7 @@
                     </div>
                 </td>
                 <td th:text="${team.goalsDelta}">11</td>
-                <td th:text="${team.gamesPlayed}">4</td>
+                <td th:text="${team.matchesPlayed}">4</td>
                 <td th:text="${team.points}" style="text-align: right;"><b>5</b></td>
             </tr>
         </table>
@@ -54,7 +54,7 @@
                 <th>G</th>
                 <th>Pts</th>
             </tr>
-            <tr th:each="team,iter : ${tournament.boxes[1].teams}">
+            <tr th:each="team,iter : ${tournament.groups[1].teams}">
                 <td th:text="${iter.index + 1}">1</td>
                 <!--<td th:text="${team.displayName}" style="color: #ecec3c; font-size: 11pt;">John Hopkins</td>-->
                 <td>
@@ -75,7 +75,7 @@
                     </div>
                 </td>
                 <td th:text="${team.goalsDelta}">11</td>
-                <td th:text="${team.gamesPlayed}">4</td>
+                <td th:text="${team.matchesPlayed}">4</td>
                 <td th:text="${team.points}" style="text-align: right;"><b>5</b></td>
             </tr>
         </table>
@@ -93,19 +93,19 @@
                     <div style="width: 12px; height: 12px; border-radius: 50%; background-color: yellow; margin: auto;"/>
                 </th>
             </tr>
-            <tr th:each="boxGame : ${tournament.boxes[0].boxGames}">
+            <tr th:each="groupMatch : ${tournament.groups[0].groupMatches}">
                 <td style="text-align: center;">
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + boxGame.redTeam.player1.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + groupMatch.redTeam.player1.username + '.png'}}"/>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + boxGame.redTeam.player2.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + groupMatch.redTeam.player2.username + '.png'}}"/>
                 </td>
-                <td th:text="${boxGame.played ? boxGame.game.redTeamGoals + ' : ' + boxGame.game.yellowTeamGoals : '-:-'}" style="text-align: center;">5:10</td>
+                <td th:text="${groupMatch.played ? groupMatch.match.redTeamGoals + ' : ' + groupMatch.match.yellowTeamGoals : '-:-'}" style="text-align: center;">5:10</td>
                 <td style="text-align: center;">
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + boxGame.yellowTeam.player1.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + groupMatch.yellowTeam.player1.username + '.png'}}"/>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + boxGame.yellowTeam.player2.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + groupMatch.yellowTeam.player2.username + '.png'}}"/>
                 </td>
             </tr>
 
@@ -122,19 +122,19 @@
                     <div style="width: 12px; height: 12px; border-radius: 50%; background-color: yellow; margin: auto;"/>
                 </th>
             </tr>
-            <tr th:each="boxGame : ${tournament.boxes[1].boxGames}">
+            <tr th:each="groupMatch : ${tournament.groups[1].groupMatches}">
                 <td style="text-align: center;">
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + boxGame.redTeam.player1.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + groupMatch.redTeam.player1.username + '.png'}}"/>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + boxGame.redTeam.player2.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + groupMatch.redTeam.player2.username + '.png'}}"/>
                 </td>
-                <td th:text="${boxGame.played ? boxGame.game.redTeamGoals + ' : ' + boxGame.game.yellowTeamGoals : '-:-'}" style="text-align: center;">5:10</td>
+                <td th:text="${groupMatch.played ? groupMatch.match.redTeamGoals + ' : ' + groupMatch.match.yellowTeamGoals : '-:-'}" style="text-align: center;">5:10</td>
                 <td style="text-align: center;">
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + boxGame.yellowTeam.player1.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + groupMatch.yellowTeam.player1.username + '.png'}}"/>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + boxGame.yellowTeam.player2.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + groupMatch.yellowTeam.player2.username + '.png'}}"/>
                 </td>
             </tr>
 

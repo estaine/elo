@@ -1,7 +1,7 @@
 package com.estaine.elo.format;
 
 import com.estaine.elo.entity.Player;
-import com.estaine.elo.entity.PlayerStats;
+import com.estaine.elo.dto.PlayerStats;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +20,11 @@ public class RatingFormatter {
         Collections.reverse(sortedRatings);
 
         sortedRatings = sortedRatings.stream()
-                .filter(r -> r.getBaseStats().getGamesPlayed() >= significanceThreshold)
+                .filter(r -> r.getBaseStats().getMatchesPlayed() >= significanceThreshold)
                 .collect(Collectors.toList());
 
-        sortedRatings.forEach(r -> r.getGames()
-                .forEach(g -> g.setBoxGame(null)));
+        sortedRatings.forEach(r -> r.getMatches()
+                .forEach(g -> g.setGroupMatch(null)));
 
         return sortedRatings;
 

@@ -1,7 +1,7 @@
 package com.estaine.elo.entity.tournament;
 
 import com.estaine.elo.entity.BaseModel;
-import com.estaine.elo.entity.Game;
+import com.estaine.elo.entity.Match;
 import com.estaine.elo.entity.Player;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 
 @Entity
-public class BoxGame extends BaseModel {
+@Table(name = "box_game")
+public class GroupMatch extends BaseModel {
 
     @ManyToOne
     @JoinColumn(name = "red_team_id")
@@ -27,20 +28,21 @@ public class BoxGame extends BaseModel {
     private Team yellowTeam;
 
     @ManyToOne
-    private Box box;
+    @JoinColumn(name = "box_id")
+    private Group group;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "game_id", unique = true)
-    private Game game;
+    private Match match;
 
-    public BoxGame(Team redTeam, Team yellowTeam, Box box) {
+    public GroupMatch(Team redTeam, Team yellowTeam, Group group) {
         this.redTeam = redTeam;
         this.yellowTeam = yellowTeam;
-        this.box = box;
+        this.group = group;
     }
 
     public boolean isPlayed() {
-        return game != null;
+        return match != null;
     }
 
     public boolean consistsOf(Team redTeam, Team yellowTeam) {
@@ -54,8 +56,8 @@ public class BoxGame extends BaseModel {
     @Override
     public String toString() {
         String toString = redTeam.getName() + " vs " + yellowTeam.getName();
-        if(game != null) {
-            toString += " " + game.getRedTeamGoals() + ":" + game.getYellowTeamGoals();
+        if(match != null) {
+            toString += " " + match.getRedTeamGoals() + ":" + match.getYellowTeamGoals();
         }
 
         return toString;

@@ -1,6 +1,6 @@
 package com.estaine.elo.service;
 
-import com.estaine.elo.entity.PlayerStats;
+import com.estaine.elo.dto.PlayerStats;
 
 public interface PlayerStatsService {
 

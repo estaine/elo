@@ -1,30 +1,29 @@
 package com.estaine.elo.service.impl;
 
-import com.estaine.elo.entity.tournament.Box;
-import com.estaine.elo.entity.tournament.BoxGame;
+import com.estaine.elo.entity.tournament.Group;
+import com.estaine.elo.entity.tournament.GroupMatch;
 import com.estaine.elo.entity.tournament.Tournament;
-import com.estaine.elo.repository.BoxGameRepository;
+import com.estaine.elo.repository.GroupMatchRepository;
 import com.estaine.elo.repository.TournamentRepository;
 import com.estaine.elo.service.TournamentService;
-import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class DefaultTournamentService implements TournamentService {
 
     private final TournamentRepository tournamentRepository;
-    private final BoxGameRepository boxGameRepository;
+    private final GroupMatchRepository groupMatchRepository;
 
     @Autowired
     public DefaultTournamentService(@NonNull TournamentRepository tournamentRepository,
-                                    @NonNull BoxGameRepository boxGameRepository) {
+                                    @NonNull GroupMatchRepository groupMatchRepository) {
         this.tournamentRepository = tournamentRepository;
-        this.boxGameRepository = boxGameRepository;
+        this.groupMatchRepository = groupMatchRepository;
     }
 
     @Override
@@ -35,45 +34,45 @@ public class DefaultTournamentService implements TournamentService {
             return;
         }
 
-        List<BoxGame> games = new ArrayList<>();
+        List<GroupMatch> groupMatches = new ArrayList<>();
 
-        for (Box box : tournament.getBoxes()) {
-            for (com.estaine.elo.entity.tournament.Team redTeam : box.getTeams()) {
-                for (com.estaine.elo.entity.tournament.Team yellowTeam : box.getTeams()) {
+        for (Group group : tournament.getGroups()) {
+            for (com.estaine.elo.entity.tournament.Team redTeam : group.getTeams()) {
+                for (com.estaine.elo.entity.tournament.Team yellowTeam : group.getTeams()) {
                     if (!redTeam.getId().equals(yellowTeam.getId())) {
-                        games.add(new BoxGame(redTeam, yellowTeam, box));
+                        groupMatches.add(new GroupMatch(redTeam, yellowTeam, group));
                     }
                 }
             }
         }
 
-        Collections.shuffle(games);
-        boxGameRepository.save(games);
+        Collections.shuffle(groupMatches);
+        groupMatchRepository.save(groupMatches);
 
     }
 
     @Override
-    public Tournament getBoxStats() {
+    public Tournament getGroupStats() {
         Tournament tournament = tournamentRepository.findByActiveTrue();
 
         if (tournament == null) {
             return null;
         }
 
-        for(Box box : tournament.getBoxes()) {
-            for(BoxGame boxGame : box.getBoxGames()) {
-                if(boxGame.isPlayed()) {
+        for(Group group : tournament.getGroups()) {
+            for(GroupMatch groupMatch : group.getGroupMatches()) {
+                if(groupMatch.isPlayed()) {
                     com.estaine.elo.entity.tournament.Team winner =
-                            (boxGame.getGame().getRedTeamGoals() > boxGame.getGame().getYellowTeamGoals())
-                            ? boxGame.getRedTeam() : boxGame.getYellowTeam();
-                    com.estaine.elo.entity.tournament.Team loser = (winner == boxGame.getRedTeam())
-                            ? boxGame.getYellowTeam() : boxGame.getRedTeam();
+                            (groupMatch.getMatch().getRedTeamGoals() > groupMatch.getMatch().getYellowTeamGoals())
+                            ? groupMatch.getRedTeam() : groupMatch.getYellowTeam();
+                    com.estaine.elo.entity.tournament.Team loser = (winner == groupMatch.getRedTeam())
+                            ? groupMatch.getYellowTeam() : groupMatch.getRedTeam();
 
                     int delta =
-                            Math.abs(boxGame.getGame().getRedTeamGoals() - boxGame.getGame().getYellowTeamGoals());
+                            Math.abs(groupMatch.getMatch().getRedTeamGoals() - groupMatch.getMatch().getYellowTeamGoals());
 
-                    winner.registerGame(delta);
-                    loser.registerGame(-delta);
+                    winner.registerMatch(delta);
+                    loser.registerMatch(-delta);
                 }
             }
         }

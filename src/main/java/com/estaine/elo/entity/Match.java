@@ -1,6 +1,7 @@
 package com.estaine.elo.entity;
 
-import com.estaine.elo.entity.tournament.BoxGame;
+import com.estaine.elo.entity.tournament.GroupMatch;
+import com.estaine.elo.entity.tournament.GroupMatch;
 import java.time.format.DateTimeFormatter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +15,8 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 
 @Entity
-public class Game extends BaseModel {
+@Table(name = "game")
+public class Match extends BaseModel {
 
     private static final String DATE_TIME_FORMAT = "E, dd-MMM-yyyy, HH:mm";
 
@@ -38,16 +40,16 @@ public class Game extends BaseModel {
 
     private int yellowTeamGoals;
 
-    @OneToOne(mappedBy = "game", fetch = FetchType.EAGER)
-    private BoxGame boxGame;
+    @OneToOne(mappedBy = "match", fetch = FetchType.EAGER)
+    private GroupMatch groupMatch;
 
     @Column(name = "played_on")
     private LocalDateTime playedOn;
 
     private String reportedBy;
 
-    public boolean isTournamentGame() {
-        return boxGame != null;
+    public boolean isTournamentMatch() {
+        return groupMatch != null;
     }
 
     public List<Player> getAllParticipants() {

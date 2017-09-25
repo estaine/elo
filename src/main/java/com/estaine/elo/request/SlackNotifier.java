@@ -1,8 +1,9 @@
 package com.estaine.elo.request;
 
-import com.estaine.elo.entity.Game;
+import com.estaine.elo.entity.Match;
 import com.estaine.elo.entity.Player;
-import com.estaine.elo.entity.tournament.BoxGame;
+import com.estaine.elo.entity.tournament.GroupMatch;
+import com.estaine.elo.entity.tournament.GroupMatch;
 import com.estaine.elo.properties.SlackProperties;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -32,15 +33,15 @@ public class SlackNotifier {
     }
 
     @Async
-    public void sendCommonMatchNotifications(Player requester, Game game) {
-        String notification = buildMatchNotification(requester, game);
-        notifyPlayersAndChannel(notification, game.getAllParticipants());
+    public void sendCommonMatchNotifications(Player requester, Match match) {
+        String notification = buildMatchNotification(requester, match);
+        notifyPlayersAndChannel(notification, match.getAllParticipants());
     }
 
     @Async
-    public void sendGroupMatchNotifications(Player requester, BoxGame boxGame) {
-        String notification = buildGroupMatchNotification(requester, boxGame);
-        notifyPlayersAndChannel(notification, boxGame.getAllParticipants());
+    public void sendGroupMatchNotifications(Player requester, GroupMatch groupMatch) {
+        String notification = buildGroupMatchNotification(requester, groupMatch);
+        notifyPlayersAndChannel(notification, groupMatch.getAllParticipants());
     }
 
     private void notifyPlayersAndChannel(String notification, List<Player> players) {
@@ -65,18 +66,18 @@ public class SlackNotifier {
         }
     }
 
-    private String buildMatchNotification(Player requester, Game game) {
+    private String buildMatchNotification(Player requester, Match match) {
         return requester.getFormattedSlackId() + " has registered the following match:\n"
-                + game.getRedTeamPlayer1().getFormattedSlackId() + " " + game.getRedTeamPlayer2().getFormattedSlackId()
-                + " *" + game.getRedTeamGoals() + ":" + game.getYellowTeamGoals() + "* "
-                + game.getYellowTeamPlayer1().getFormattedSlackId() + " " + game.getYellowTeamPlayer2().getFormattedSlackId();
+                + match.getRedTeamPlayer1().getFormattedSlackId() + " " + match.getRedTeamPlayer2().getFormattedSlackId()
+                + " *" + match.getRedTeamGoals() + ":" + match.getYellowTeamGoals() + "* "
+                + match.getYellowTeamPlayer1().getFormattedSlackId() + " " + match.getYellowTeamPlayer2().getFormattedSlackId();
     }
 
-    private String buildGroupMatchNotification(Player requester, BoxGame boxGame) {
+    private String buildGroupMatchNotification(Player requester, GroupMatch groupMatch) {
         return requester.getFormattedSlackId() + " has registered the following group match in tournament : *"
-                + boxGame.getBox().getTournament().getName() + "*\n"
-                + boxGame.getRedTeam().getPlayer1().getFormattedSlackId() + " " + boxGame.getRedTeam().getPlayer2().getFormattedSlackId()
-                + " *" + boxGame.getGame().getRedTeamGoals() + ":" + boxGame.getGame().getYellowTeamGoals() + "* "
-                + boxGame.getYellowTeam().getPlayer1().getFormattedSlackId() + " " + boxGame.getYellowTeam().getPlayer2().getFormattedSlackId();
+                + groupMatch.getGroup().getTournament().getName() + "*\n"
+                + groupMatch.getRedTeam().getPlayer1().getFormattedSlackId() + " " + groupMatch.getRedTeam().getPlayer2().getFormattedSlackId()
+                + " *" + groupMatch.getMatch().getRedTeamGoals() + ":" + groupMatch.getMatch().getYellowTeamGoals() + "* "
+                + groupMatch.getYellowTeam().getPlayer1().getFormattedSlackId() + " " + groupMatch.getYellowTeam().getPlayer2().getFormattedSlackId();
     }
 }

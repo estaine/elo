@@ -1,5 +1,7 @@
-package com.estaine.elo.entity;
+package com.estaine.elo.dto;
 
+import com.estaine.elo.entity.Match;
+import com.estaine.elo.entity.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +11,7 @@ import lombok.Data;
 @Data
 public class PlayerStats {
     private Player player;
-    private List<Game> games;
+    private List<Match> matches;
     private Integer goalsFor;
     private Integer goalsAgainst;
     private BaseStats baseStats;
@@ -18,7 +20,7 @@ public class PlayerStats {
 
     public PlayerStats(Player player) {
         this.player = player;
-        this.games = new ArrayList<>();
+        this.matches = new ArrayList<>();
         this.goalsFor = 0;
         this.goalsAgainst = 0;
         this.baseStats = new BaseStats();
@@ -26,32 +28,32 @@ public class PlayerStats {
         this.ratingDelta = new HashMap<>();
     }
 
-    public void updateStats(Game game) {
-        games.add(game);
+    public void updateStats(Match match) {
+        matches.add(match);
 
-        boolean playerIsRed = game.getRedTeamPlayer1().equals(player) || game.getRedTeamPlayer2().equals(player);
-        boolean playerIsYellow = game.getYellowTeamPlayer1().equals(player) || game.getYellowTeamPlayer2().equals(player);
+        boolean playerIsRed = match.getRedTeamPlayer1().equals(player) || match.getRedTeamPlayer2().equals(player);
+        boolean playerIsYellow = match.getYellowTeamPlayer1().equals(player) || match.getYellowTeamPlayer2().equals(player);
 
-        boolean redWon = game.getRedTeamGoals() > game.getYellowTeamGoals();
-        boolean yellowWon = game.getYellowTeamGoals() > game.getRedTeamGoals();
+        boolean redWon = match.getRedTeamGoals() > match.getYellowTeamGoals();
+        boolean yellowWon = match.getYellowTeamGoals() > match.getRedTeamGoals();
 
         boolean win = (playerIsRed && redWon) || (playerIsYellow && yellowWon);
-        results.put(game.getId(), win);
+        results.put(match.getId(), win);
 
         if(playerIsRed) {
-            goalsFor += game.getRedTeamGoals();
-            goalsAgainst += game.getYellowTeamGoals();
+            goalsFor += match.getRedTeamGoals();
+            goalsAgainst += match.getYellowTeamGoals();
         } else {
-            goalsFor += game.getYellowTeamGoals();
-            goalsAgainst += game.getRedTeamGoals();
+            goalsFor += match.getYellowTeamGoals();
+            goalsAgainst += match.getRedTeamGoals();
         }
     }
 
     public PlayerStats subtract(PlayerStats playerStats) {
         PlayerStats diff = new PlayerStats(this.player);
 
-        diff.games.addAll(this.games);
-        diff.games.removeAll(playerStats.games);
+        diff.matches.addAll(this.matches);
+        diff.matches.removeAll(playerStats.matches);
 
         diff.goalsFor = this.goalsFor - playerStats.goalsFor;
         diff.goalsAgainst = this.goalsAgainst - playerStats.goalsAgainst;

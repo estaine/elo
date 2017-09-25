@@ -26,7 +26,7 @@
             <tr>
                 <td></td>
                 <td>Games played</td>
-                <td th:text="${playerStats.baseStats.gamesPlayed}"></td>
+                <td th:text="${playerStats.baseStats.matchesPlayed}"></td>
             </tr>
             <tr>
                 <td></td>
@@ -53,23 +53,23 @@
                     <div style="width: 12px; height: 12px; border-radius: 50%; background-color: yellow; margin: auto;"/>
                 </th>
             </tr>
-            <tr th:each="game : ${playerStats.games}">
+            <tr th:each="match : ${playerStats.matches}">
                 <td>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + game.redTeamPlayer1.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + match.redTeamPlayer1.username + '.png'}}"/>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + game.redTeamPlayer2.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + match.redTeamPlayer2.username + '.png'}}"/>
                 </td>
-                <td th:classappend="${playerStats.results[__${game.id}__]} ? score-win : score-lose">
-                    <div th:text="${game.redTeamGoals + ' : ' + game.yellowTeamGoals}" style="text-align: center;">5:10</div>
-                    <div th:text="${(playerStats.results[__${game.id}__] ? '+ ' : '– ') + #numbers.formatDecimal(playerStats.ratingDelta[__${game.id}__], 0, 0)}"
+                <td th:classappend="${playerStats.results[__${match.id}__]} ? score-win : score-lose">
+                    <div th:text="${match.redTeamGoals + ' : ' + match.yellowTeamGoals}" style="text-align: center;">5:10</div>
+                    <div th:text="${(playerStats.results[__${match.id}__] ? '+ ' : '– ') + #numbers.formatDecimal(playerStats.ratingDelta[__${match.id}__], 0, 0)}"
                          style="text-align: center; font-size: 8pt;">+503</div>
                 </td>
                 <td>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + game.yellowTeamPlayer1.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + match.yellowTeamPlayer1.username + '.png'}}"/>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         th:src="@{${'/userpics/' + game.yellowTeamPlayer2.username + '.png'}}"/>
+                         th:src="@{${'/userpics/' + match.yellowTeamPlayer2.username + '.png'}}"/>
                 </td>
             </tr>
 

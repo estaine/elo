@@ -1,6 +1,6 @@
 package com.estaine.elo.controller;
 
-import com.estaine.elo.service.GameService;
+import com.estaine.elo.service.MatchService;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/slack")
 public class SlackController {
 
-    private final GameService gameService;
+    private final MatchService matchService;
 
     @Autowired
-    public SlackController(@NonNull GameService gameService) {
-        this.gameService = gameService;
+    public SlackController(@NonNull MatchService matchService) {
+        this.matchService = matchService;
     }
 
     @RequestMapping(value = "/match", method = RequestMethod.POST, headers = "Content-Type=application/x-www-form-urlencoded", consumes = {MediaType.ALL_VALUE})
@@ -25,7 +25,7 @@ public class SlackController {
             @RequestParam("user_name") String userName, @RequestParam String text) {
 
         System.out.println("Slack /match request received from @" + userName);
-        return gameService.registerMatch(userName, channelName, text, token);
+        return matchService.registerMatch(userName, channelName, text, token);
     }
 
     @RequestMapping(value = "/group-match", method = RequestMethod.POST, headers = "Content-Type=application/x-www-form-urlencoded", consumes = {MediaType.ALL_VALUE})
@@ -33,6 +33,6 @@ public class SlackController {
             @RequestParam("user_name") String userName, @RequestParam String text) {
 
         System.out.println("Slack /group-match request received from @" + userName);
-        return gameService.registerGroupMatch(userName, channelName, text, token);
+        return matchService.registerGroupMatch(userName, channelName, text, token);
     }
 }

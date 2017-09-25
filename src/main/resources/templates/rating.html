@@ -25,7 +25,7 @@
         <td><img style="border-radius: 50%; width: 28px; height: 28px;"
                  th:src="@{${'/userpics/' + playerStats.player.username + '.png'}}"/></td>
         <td><a th:href="'/player/' + ${playerStats.player.username}"><span th:text="${playerStats.player.fullName}"/></a></td>
-        <td th:text="${playerStats.baseStats.gamesPlayed}">11</td>
+        <td th:text="${playerStats.baseStats.matchesPlayed}">11</td>
         <td th:text="${#numbers.formatDecimal(playerStats.baseStats.rating, 0, 0)}"><b>133.05</b></td>
     </tr>
 </table>

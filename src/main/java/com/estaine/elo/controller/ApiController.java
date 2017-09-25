@@ -1,6 +1,6 @@
 package com.estaine.elo.controller;
 
-import com.estaine.elo.entity.PlayerStats;
+import com.estaine.elo.dto.PlayerStats;
 import com.estaine.elo.format.RatingFormatter;
 import com.estaine.elo.service.RatingService;
 import com.estaine.elo.service.TournamentService;

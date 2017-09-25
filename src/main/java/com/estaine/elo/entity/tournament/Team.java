@@ -27,7 +27,8 @@ public class Team extends BaseModel {
     private String name;
 
     @ManyToOne
-    private Box box;
+    @JoinColumn(name = "box_id")
+    private Group group;
 
     @ManyToOne
     private Tournament tournament;
@@ -36,14 +37,14 @@ public class Team extends BaseModel {
     private int goalsDelta;
 
     @Transient
-    private int gamesPlayed;
+    private int matchesPlayed;
 
     @Transient
     private int points;
 
-    public void registerGame(int delta) {
+    public void registerMatch(int delta) {
         goalsDelta += delta;
-        gamesPlayed++;
+        matchesPlayed++;
         if (delta > 0) {
             points++;
         }

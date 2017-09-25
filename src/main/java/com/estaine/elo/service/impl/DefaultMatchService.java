@@ -1,18 +1,18 @@
 package com.estaine.elo.service.impl;
 
-import com.estaine.elo.entity.Game;
+import com.estaine.elo.entity.Match;
 import com.estaine.elo.entity.Player;
-import com.estaine.elo.entity.tournament.Box;
-import com.estaine.elo.entity.tournament.BoxGame;
+import com.estaine.elo.entity.tournament.Group;
+import com.estaine.elo.entity.tournament.GroupMatch;
 import com.estaine.elo.entity.tournament.Team;
 import com.estaine.elo.entity.tournament.Tournament;
 import com.estaine.elo.properties.SlackProperties;
-import com.estaine.elo.repository.BoxGameRepository;
-import com.estaine.elo.repository.GameRepository;
+import com.estaine.elo.repository.GroupMatchRepository;
+import com.estaine.elo.repository.MatchRepository;
 import com.estaine.elo.repository.PlayerRepository;
 import com.estaine.elo.repository.TournamentRepository;
 import com.estaine.elo.request.SlackNotifier;
-import com.estaine.elo.service.GameService;
+import com.estaine.elo.service.MatchService;
 import com.estaine.elo.service.exception.*;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +25,13 @@ import java.util.Objects;
 import java.util.Set;
 
 @Service
-public class DefaultGameService implements GameService {
+public class DefaultMatchService implements MatchService {
 
     private static final String COMMON_ERROR_MESSAGE = "Something went wrong. Please pray to Allah and try again.";
 
     private final PlayerRepository playerRepository;
-    private final GameRepository gameRepository;
-    private final BoxGameRepository boxGameRepository;
+    private final MatchRepository matchRepository;
+    private final GroupMatchRepository groupMatchRepository;
     private final TournamentRepository tournamentRepository;
     private final SlackNotifier slackNotifier;
 
@@ -42,15 +42,15 @@ public class DefaultGameService implements GameService {
     private final SlackProperties slackProperties;
 
     @Autowired
-    public DefaultGameService(@NonNull PlayerRepository playerRepository,
-                              @NonNull GameRepository gameRepository,
-                              @NonNull BoxGameRepository boxGameRepository,
+    public DefaultMatchService(@NonNull PlayerRepository playerRepository,
+                              @NonNull MatchRepository matchRepository,
+                              @NonNull GroupMatchRepository groupMatchRepository,
                               @NonNull TournamentRepository tournamentRepository,
                               @NonNull SlackNotifier slackNotifier,
                               @NonNull SlackProperties slackProperties) {
         this.playerRepository = playerRepository;
-        this.gameRepository = gameRepository;
-        this.boxGameRepository = boxGameRepository;
+        this.matchRepository = matchRepository;
+        this.groupMatchRepository = groupMatchRepository;
         this.tournamentRepository = tournamentRepository;
         this.slackNotifier = slackNotifier;
         this.slackProperties = slackProperties;
@@ -60,10 +60,10 @@ public class DefaultGameService implements GameService {
     public String registerMatch(String requesterUsername, String channelName, String request, String token) {
         try {
             String slackFormattedRequesterUsername = "@" + requesterUsername;
-            Game game = gameRepository.save(buildGame(channelName, request, token, slackFormattedRequesterUsername));
+            Match match = matchRepository.save(buildMatch(channelName, request, token, slackFormattedRequesterUsername));
 
             Player requester = playerRepository.findByUsername(slackFormattedRequesterUsername);
-            slackNotifier.sendCommonMatchNotifications(requester, game);
+            slackNotifier.sendCommonMatchNotifications(requester, match);
 
             return "Match registered";
         } catch (SlackRequestValidationException e) {
@@ -77,14 +77,14 @@ public class DefaultGameService implements GameService {
     public String registerGroupMatch(String requesterUsername, String channelName, String request, String token) {
         try {
             String slackFormattedRequesterUsername = "@" + requesterUsername;
-            Game game = buildGame(channelName, request, token, slackFormattedRequesterUsername);
-            BoxGame boxGame = buildGroupGame(game);
+            Match match = buildMatch(channelName, request, token, slackFormattedRequesterUsername);
+            GroupMatch groupMatch = buildGroupMatch(match);
 
-            gameRepository.save(game);
-            boxGame = boxGameRepository.save(boxGame);
+            matchRepository.save(match);
+            groupMatch = groupMatchRepository.save(groupMatch);
 
             Player requester = playerRepository.findByUsername(slackFormattedRequesterUsername);
-            slackNotifier.sendGroupMatchNotifications(requester, boxGame);
+            slackNotifier.sendGroupMatchNotifications(requester, groupMatch);
 
             return "Group match registered";
         } catch (SlackRequestValidationException e) {
@@ -95,7 +95,7 @@ public class DefaultGameService implements GameService {
 
     }
 
-    private Game buildGame(String channelName, String request, String token, String requesterUsername) throws SlackRequestValidationException {
+    private Match buildMatch(String channelName, String request, String token, String requesterUsername) throws SlackRequestValidationException {
         if (!slackProperties.getSecretKey().equals(token)) {
             throw new InvalidTokenException();
         }
@@ -152,47 +152,47 @@ public class DefaultGameService implements GameService {
             throw new NegativeGoalsCountException();
         }
 
-        Game game = new Game();
-        game.setRedTeamPlayer1(red1);
-        game.setRedTeamPlayer2(red2);
-        game.setYellowTeamPlayer1(yellow1);
-        game.setYellowTeamPlayer2(yellow2);
-        game.setRedTeamGoals(redGoals);
-        game.setYellowTeamGoals(yellowGoals);
-        game.setPlayedOn(LocalDateTime.now());
-        game.setReportedBy(requesterUsername);
+        Match match = new Match();
+        match.setRedTeamPlayer1(red1);
+        match.setRedTeamPlayer2(red2);
+        match.setYellowTeamPlayer1(yellow1);
+        match.setYellowTeamPlayer2(yellow2);
+        match.setRedTeamGoals(redGoals);
+        match.setYellowTeamGoals(yellowGoals);
+        match.setPlayedOn(LocalDateTime.now());
+        match.setReportedBy(requesterUsername);
 
-        return game;
+        return match;
     }
 
-    private BoxGame buildGroupGame(Game game) throws SlackRequestValidationException {
+    private GroupMatch buildGroupMatch(Match match) throws SlackRequestValidationException {
         Tournament tournament = tournamentRepository.findByActiveTrue();
 
-        Team redTeam = buildTeam(tournament, game.getRedTeamPlayer1(), game.getRedTeamPlayer2());
-        Team yellowTeam = buildTeam(tournament, game.getYellowTeamPlayer1(), game.getYellowTeamPlayer2());
+        Team redTeam = buildTeam(tournament, match.getRedTeamPlayer1(), match.getRedTeamPlayer2());
+        Team yellowTeam = buildTeam(tournament, match.getYellowTeamPlayer1(), match.getYellowTeamPlayer2());
 
-        if (!redTeam.getBox().getId().equals(yellowTeam.getBox().getId())) {
+        if (!redTeam.getGroup().getId().equals(yellowTeam.getGroup().getId())) {
             throw new IncompatibleTeamsException();
         }
 
-        Box box = redTeam.getBox();
+        Group group = redTeam.getGroup();
 
-        BoxGame boxGame = box.getBoxGames().stream()
+        GroupMatch groupMatch = group.getGroupMatches().stream()
                 .filter(bg -> bg.consistsOf(redTeam, yellowTeam))
                 .findFirst()
                 .orElse(null);
 
-        if (boxGame == null) {
+        if (groupMatch == null) {
             throw new NoMatchScheduledException();
         }
 
-        if (boxGame.isPlayed()) {
+        if (groupMatch.isPlayed()) {
             throw new MatchAlreadyPlayedException();
         }
 
-        boxGame.setGame(game);
+        groupMatch.setMatch(match);
 
-        return boxGame;
+        return groupMatch;
     }
 
     private Player findPlayerInDB(String username) throws PlayerNotFoundException {

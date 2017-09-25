@@ -47,7 +47,7 @@ public class WebController {
 
     @RequestMapping(value = "/tournament/groups", method = RequestMethod.GET)
     public String getTournamentGroupStats(Model model) {
-        model.addAttribute("tournament", groupStatsFormatter.formatTournament(tournamentService.getBoxStats()));
+        model.addAttribute("tournament", groupStatsFormatter.formatTournament(tournamentService.getGroupStats()));
         return "groups";
     }
 

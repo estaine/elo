@@ -6,6 +6,6 @@ public interface TournamentService {
 
     void startGroupStage(Long tournamentId);
 
-    Tournament getBoxStats();
+    Tournament getGroupStats();
 
 }

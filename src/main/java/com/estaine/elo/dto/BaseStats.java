@@ -1,4 +1,4 @@
-package com.estaine.elo.entity;
+package com.estaine.elo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,23 +10,23 @@ public class BaseStats {
     private static final double INITIAL_RATING = 10_000.0;
 
     private Double rating;
-    private int gamesPlayed;
+    private int matchesPlayed;
 
     public BaseStats() {
         this.rating = INITIAL_RATING;
-        gamesPlayed = 0;
+        matchesPlayed = 0;
     }
 
     public void updateRating(double rating) {
         this.rating = rating;
-        gamesPlayed++;
+        matchesPlayed++;
     }
 
     public BaseStats subtract(BaseStats baseStats) {
         BaseStats diff = new BaseStats();
 
         diff.rating = this.rating - baseStats.rating;
-        diff.gamesPlayed = this.gamesPlayed - baseStats.gamesPlayed;
+        diff.matchesPlayed = this.matchesPlayed - baseStats.matchesPlayed;
 
         return diff;
     }

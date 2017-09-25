@@ -19,7 +19,7 @@ public class Tournament extends BaseModel {
     private Boolean active;
 
     @OneToMany(mappedBy = "tournament")
-    private List<Box> boxes;
+    private List<Group> groups;
 
     @OneToMany(mappedBy = "tournament")
     private List<Team> teams;

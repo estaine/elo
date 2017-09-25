@@ -1,7 +1,7 @@
 package com.estaine.elo.service.impl;
 
 import com.estaine.elo.entity.Player;
-import com.estaine.elo.entity.PlayerStats;
+import com.estaine.elo.dto.PlayerStats;
 import com.estaine.elo.repository.PlayerRepository;
 import com.estaine.elo.service.PlayerStatsService;
 import com.estaine.elo.service.RatingService;

@@ -1,7 +1,7 @@
 package com.estaine.elo.service;
 
 import com.estaine.elo.entity.Player;
-import com.estaine.elo.entity.PlayerStats;
+import com.estaine.elo.dto.PlayerStats;
 
 import java.time.LocalDateTime;
 import java.util.Map;

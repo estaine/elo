@@ -1,9 +1,9 @@
 package com.estaine.elo.service.impl;
 
-import com.estaine.elo.entity.Game;
+import com.estaine.elo.entity.Match;
 import com.estaine.elo.entity.Player;
-import com.estaine.elo.entity.PlayerStats;
-import com.estaine.elo.repository.GameRepository;
+import com.estaine.elo.dto.PlayerStats;
+import com.estaine.elo.repository.MatchRepository;
 import com.estaine.elo.repository.PlayerRepository;
 import com.estaine.elo.service.RatingService;
 import java.time.DayOfWeek;
@@ -32,12 +32,12 @@ public class DefaultRatingService implements RatingService {
     private static final int WEEKS_RATED = 10;
 
     private final PlayerRepository playerRepository;
-    private final GameRepository gameRepository;
+    private final MatchRepository matchRepository;
 
     @Autowired
-    public DefaultRatingService(@NonNull PlayerRepository playerRepository, @NonNull GameRepository gameRepository) {
+    public DefaultRatingService(@NonNull PlayerRepository playerRepository, @NonNull MatchRepository matchRepository) {
         this.playerRepository = playerRepository;
-        this.gameRepository = gameRepository;
+        this.matchRepository = matchRepository;
     }
 
 
@@ -50,7 +50,7 @@ public class DefaultRatingService implements RatingService {
     public Map<Player, PlayerStats> calculateRatings(LocalDateTime base) {
 
         List<Player> players = playerRepository.findAll();
-        List<Game> games = gameRepository.findByPlayedOnLessThanEqualOrderByPlayedOnAsc(base);
+        List<Match> matches = matchRepository.findByPlayedOnLessThanEqualOrderByPlayedOnAsc(base);
 
         Map<Player, PlayerStats> statsMap = new HashMap<>();
 
@@ -58,22 +58,22 @@ public class DefaultRatingService implements RatingService {
             statsMap.put(player, new PlayerStats(player));
         }
 
-        for (Game game : games) {
-            Player winner1 = (game.getRedTeamGoals() > game.getYellowTeamGoals()) ? game.getRedTeamPlayer1() : game.getYellowTeamPlayer1();
-            Player winner2 = (winner1 == game.getRedTeamPlayer1()) ? game.getRedTeamPlayer2() : game.getYellowTeamPlayer2();
-            Player loser1 = (winner1 == game.getRedTeamPlayer1()) ? game.getYellowTeamPlayer1() : game.getRedTeamPlayer1();
-            Player loser2 = (winner1 == game.getRedTeamPlayer1()) ? game.getYellowTeamPlayer2() : game.getRedTeamPlayer2();
+        for (Match match : matches) {
+            Player winner1 = (match.getRedTeamGoals() > match.getYellowTeamGoals()) ? match.getRedTeamPlayer1() : match.getYellowTeamPlayer1();
+            Player winner2 = (winner1 == match.getRedTeamPlayer1()) ? match.getRedTeamPlayer2() : match.getYellowTeamPlayer2();
+            Player loser1 = (winner1 == match.getRedTeamPlayer1()) ? match.getYellowTeamPlayer1() : match.getRedTeamPlayer1();
+            Player loser2 = (winner1 == match.getRedTeamPlayer1()) ? match.getYellowTeamPlayer2() : match.getRedTeamPlayer2();
 
-            int goalsAgainst = (winner1 == game.getRedTeamPlayer1()) ? game.getYellowTeamGoals() : game.getRedTeamGoals();
+            int goalsAgainst = (winner1 == match.getRedTeamPlayer1()) ? match.getYellowTeamGoals() : match.getRedTeamGoals();
 
-            double tournamentMultiplier = game.isTournamentGame() ? TOURNAMENT_MULTIPLIER : 1;
+            double tournamentMultiplier = match.isTournamentMatch() ? TOURNAMENT_MULTIPLIER : 1;
 
             double winnersTotalRating = statsMap.get(winner1).getBaseStats().getRating() + statsMap.get(winner2).getBaseStats().getRating();
             double losersTotalRating = statsMap.get(loser1).getBaseStats().getRating() + statsMap.get(loser2).getBaseStats().getRating();
 
             double skillCorrection = Math.pow(losersTotalRating / winnersTotalRating, SKILL_CORRECTION_DEGREE);
 
-            int matchAgeInWeeks = getMatchAgeInWeeks(game.getPlayedOn(), base);
+            int matchAgeInWeeks = getMatchAgeInWeeks(match.getPlayedOn(), base);
 
             double obsolescenseCoefficient = (WEEKS_RATED - matchAgeInWeeks) * OBSOLESCENCE_STEP;
 
@@ -91,15 +91,15 @@ public class DefaultRatingService implements RatingService {
             statsMap.get(loser1).getBaseStats().updateRating(statsMap.get(loser1).getBaseStats().getRating() - loser1Delta);
             statsMap.get(loser2).getBaseStats().updateRating(statsMap.get(loser2).getBaseStats().getRating() - loser2Delta);
 
-            statsMap.get(winner1).updateStats(game);
-            statsMap.get(winner2).updateStats(game);
-            statsMap.get(loser1).updateStats(game);
-            statsMap.get(loser2).updateStats(game);
+            statsMap.get(winner1).updateStats(match);
+            statsMap.get(winner2).updateStats(match);
+            statsMap.get(loser1).updateStats(match);
+            statsMap.get(loser2).updateStats(match);
 
-            statsMap.get(winner1).getRatingDelta().put(game.getId(), winnerDelta);
-            statsMap.get(winner2).getRatingDelta().put(game.getId(), winnerDelta);
-            statsMap.get(loser1).getRatingDelta().put(game.getId(), loser1Delta);
-            statsMap.get(loser2).getRatingDelta().put(game.getId(), loser2Delta);
+            statsMap.get(winner1).getRatingDelta().put(match.getId(), winnerDelta);
+            statsMap.get(winner2).getRatingDelta().put(match.getId(), winnerDelta);
+            statsMap.get(loser1).getRatingDelta().put(match.getId(), loser1Delta);
+            statsMap.get(loser2).getRatingDelta().put(match.getId(), loser2Delta);
 
         }
 
