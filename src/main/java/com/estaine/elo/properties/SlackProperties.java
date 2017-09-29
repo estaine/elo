@@ -2,7 +2,6 @@ package com.estaine.elo.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
@@ -21,9 +20,15 @@ public class SlackProperties {
     private String token;
 
     @NotNull
-    private String channelId;
+    private String generalChannelId;
 
     @NotNull
-    private String channelName;
+    private String generalChannelName;
+
+    @NotNull
+    private String matchesChannelId;
+
+    @NotNull
+    private String matchesChannelName;
 
 }

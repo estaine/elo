@@ -3,7 +3,6 @@ package com.estaine.elo.request;
 import com.estaine.elo.entity.Match;
 import com.estaine.elo.entity.Player;
 import com.estaine.elo.entity.tournament.GroupMatch;
-import com.estaine.elo.entity.tournament.GroupMatch;
 import com.estaine.elo.properties.SlackProperties;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -46,7 +45,7 @@ public class SlackNotifier {
 
     private void notifyPlayersAndChannel(String notification, List<Player> players) {
         players.forEach(player -> sendSlackMessage(player.getImChannel(), notification));
-        sendSlackMessage(properties.getChannelId(), notification);
+        sendSlackMessage(properties.getMatchesChannelId(), notification);
     }
 
     @SneakyThrows

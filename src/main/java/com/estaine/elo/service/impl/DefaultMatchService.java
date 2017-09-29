@@ -100,8 +100,9 @@ public class DefaultMatchService implements MatchService {
             throw new InvalidTokenException();
         }
 
-        if (!slackProperties.getChannelName().equals(channelName)) {
-            throw new InvalidChannelException(slackProperties.getChannelName());
+        if (!slackProperties.getGeneralChannelName().equals(channelName)
+                && !slackProperties.getMatchesChannelName().equals(channelName)) {
+            throw new InvalidChannelException(Arrays.asList(slackProperties.getGeneralChannelName(), slackProperties.getMatchesChannelName()));
         }
 
         String[] requestParts = request.split(" ");
