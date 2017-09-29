@@ -67,13 +67,13 @@ public class DefaultAwardService implements AwardService {
         List<Award> awards = new ArrayList<>();
 
         awards.add(new Award(AwardType.WEEK_RATING_DELTA, AwardLevel.GOLD,
-                buildWeekDeltaRatingName(AwardLevel.GOLD, start, end),
+                buildWeekDeltaRatingName(AwardLevel.GOLD, start, end, stats.get(0).getBaseStats().getRating()),
                 stats.get(0).getPlayer()));
         awards.add(new Award(AwardType.WEEK_RATING_DELTA, AwardLevel.SILVER,
-                buildWeekDeltaRatingName(AwardLevel.SILVER, start, end),
+                buildWeekDeltaRatingName(AwardLevel.SILVER, start, end, stats.get(1).getBaseStats().getRating()),
                 stats.get(1).getPlayer()));
         awards.add(new Award(AwardType.WEEK_RATING_DELTA, AwardLevel.BRONZE,
-                buildWeekDeltaRatingName(AwardLevel.BRONZE, start, end),
+                buildWeekDeltaRatingName(AwardLevel.BRONZE, start, end, stats.get(2).getBaseStats().getRating()),
                 stats.get(2).getPlayer()));
 
         return awards;
@@ -83,30 +83,32 @@ public class DefaultAwardService implements AwardService {
         List<Award> awards = new ArrayList<>();
 
         awards.add(new Award(AwardType.WEEK_END_OVERALL_RATING, AwardLevel.GOLD,
-                buildWeekEndOverallRatingName(AwardLevel.GOLD, weekEnd),
+                buildWeekEndOverallRatingName(AwardLevel.GOLD, weekEnd, stats.get(0).getBaseStats().getRating()),
                 stats.get(0).getPlayer()));
         awards.add(new Award(AwardType.WEEK_END_OVERALL_RATING, AwardLevel.SILVER,
-                buildWeekEndOverallRatingName(AwardLevel.SILVER, weekEnd),
+                buildWeekEndOverallRatingName(AwardLevel.SILVER, weekEnd, stats.get(1).getBaseStats().getRating()),
                 stats.get(1).getPlayer()));
         awards.add(new Award(AwardType.WEEK_END_OVERALL_RATING, AwardLevel.BRONZE,
-                buildWeekEndOverallRatingName(AwardLevel.BRONZE, weekEnd),
+                buildWeekEndOverallRatingName(AwardLevel.BRONZE, weekEnd, stats.get(2).getBaseStats().getRating()),
                 stats.get(2).getPlayer()));
 
         return awards;
     }
 
-    private String buildWeekDeltaRatingName(AwardLevel level, LocalDateTime start, LocalDateTime end) {
+    private String buildWeekDeltaRatingName(AwardLevel level, LocalDateTime start, LocalDateTime end, Double ratingDelta) {
         return getTextOrdinalByLevel(level)
                 + " rank gain during week "
                 + start.format(DateTimeFormatter.ofPattern(DATE_FORMAT))
                 + " - "
-                + end.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+                + end.format(DateTimeFormatter.ofPattern(DATE_FORMAT))
+                + " (" + Integer.toString(ratingDelta.intValue()) + ")";
     }
 
-    private String buildWeekEndOverallRatingName(AwardLevel level, LocalDateTime weekEnd) {
+    private String buildWeekEndOverallRatingName(AwardLevel level, LocalDateTime weekEnd, Double rating) {
         return getTextOrdinalByLevel(level)
                 + " overall rank on "
-                + weekEnd.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+                + weekEnd.format(DateTimeFormatter.ofPattern(DATE_FORMAT))
+                + " (" + Integer.toString(rating.intValue()) + ")";
     }
 
     private String getTextOrdinalByLevel(AwardLevel level) {
