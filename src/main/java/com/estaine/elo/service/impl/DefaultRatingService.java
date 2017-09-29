@@ -79,10 +79,6 @@ public class DefaultRatingService implements RatingService {
 
             obsolescenseCoefficient = (obsolescenseCoefficient < 0 || obsolescenseCoefficient > 1) ? 0 : obsolescenseCoefficient;
 
-            if(obsolescenseCoefficient == 0) {
-                continue;
-            }
-
             double losingPercents = tournamentMultiplier * skillCorrection * obsolescenseCoefficient
                     * (MAX_LOSING_PERCENTS - (goalsAgainst * GOAL_DECREASE_COEFF));
 
