@@ -6,6 +6,7 @@ import com.estaine.elo.repository.PlayerRepository;
 import com.estaine.elo.service.PlayerStatsService;
 import com.estaine.elo.service.RatingService;
 import lombok.NonNull;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,8 @@ public class DefaultPlayerStatsService implements PlayerStatsService {
     @Override
     public PlayerStats getPlayerStats(String username) {
         Player player = playerRepository.findByUsername(username);
-        return ratingService.calculateRatings().get(player);
+        PlayerStats playerStats = ratingService.calculateRatings().get(player);
+        Hibernate.initialize(playerStats.getPlayer().getAwards());
+        return playerStats;
     }
 }

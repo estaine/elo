@@ -1,23 +1,20 @@
 package com.estaine.elo.service.impl;
 
+import com.estaine.elo.dto.PlayerStats;
 import com.estaine.elo.entity.Match;
 import com.estaine.elo.entity.Player;
-import com.estaine.elo.dto.PlayerStats;
 import com.estaine.elo.repository.MatchRepository;
 import com.estaine.elo.repository.PlayerRepository;
 import com.estaine.elo.service.RatingService;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
+import com.estaine.elo.service.util.DateTimeUtils;
 import java.time.LocalDateTime;
-import java.time.Period;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -33,11 +30,13 @@ public class DefaultRatingService implements RatingService {
 
     private final PlayerRepository playerRepository;
     private final MatchRepository matchRepository;
+    private final DateTimeUtils dateTimeUtils;
 
     @Autowired
-    public DefaultRatingService(@NonNull PlayerRepository playerRepository, @NonNull MatchRepository matchRepository) {
+    public DefaultRatingService(@NonNull PlayerRepository playerRepository, @NonNull MatchRepository matchRepository, DateTimeUtils dateTimeUtils) {
         this.playerRepository = playerRepository;
         this.matchRepository = matchRepository;
+        this.dateTimeUtils = dateTimeUtils;
     }
 
 
@@ -73,7 +72,7 @@ public class DefaultRatingService implements RatingService {
 
             double skillCorrection = Math.pow(losersTotalRating / winnersTotalRating, SKILL_CORRECTION_DEGREE);
 
-            int matchAgeInWeeks = getMatchAgeInWeeks(match.getPlayedOn(), base);
+            int matchAgeInWeeks = dateTimeUtils.calculateTimePeriodInWeeks(match.getPlayedOn(), base);
 
             double obsolescenseCoefficient = (WEEKS_RATED - matchAgeInWeeks) * OBSOLESCENCE_STEP;
 
@@ -123,17 +122,5 @@ public class DefaultRatingService implements RatingService {
         }
 
         return periodRatings;
-    }
-
-    private int getMatchAgeInWeeks(LocalDateTime matchDateTime, LocalDateTime baseDateTime) {
-        LocalDate matchWeekStartDay = getWeekStart(matchDateTime);
-        LocalDate baseWeekStartDay = getWeekStart(baseDateTime);
-
-        return Period.between(matchWeekStartDay, baseWeekStartDay).getDays() / 7;
-    }
-
-    private LocalDate getWeekStart(LocalDateTime localDateTime) {
-        LocalDate localDate = localDateTime.toLocalDate();
-        return localDate.with(DayOfWeek.MONDAY);
     }
 }

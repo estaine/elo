@@ -16,7 +16,14 @@
                     <img style="border-radius: 50%; width: 72px; height: 72px;"
                          th:src="@{${'/userpics/' + playerStats.player.username + '.png'}}"/>
                 </td>
-                <td colspan="2" style="font-size: 20pt;" th:text="${playerStats.player.fullName}">John Doe</td>
+                <td colspan="2" style="font-size: 20pt;">
+                    <div style="text-align: center" th:text="${playerStats.player.fullName}">John Doe</div>
+                    <div style="text-align: center">
+                    <span th:each="award : ${playerStats.player.awards}">
+                    <img th:src="@{${'/images/' + award.iconFilename}}" th:title="${award.name}"
+                         style="margin: 10px 5px -5px; width: 20px; height: 20px;"/></span>
+                    </div>
+                </td>
             </tr>
             <tr>
                 <td></td>
@@ -63,7 +70,8 @@
                 <td th:classappend="${playerStats.results[__${match.id}__]} ? score-win : score-lose">
                     <div th:text="${match.redTeamGoals + ' : ' + match.yellowTeamGoals}" style="text-align: center;">5:10</div>
                     <div th:text="${(playerStats.results[__${match.id}__] ? '+ ' : '– ') + #numbers.formatDecimal(playerStats.ratingDelta[__${match.id}__], 0, 0)}"
-                         style="text-align: center; font-size: 8pt;">+503</div>
+                         style="text-align: center; font-size: 8pt;">+503
+                    </div>
                 </td>
                 <td>
                     <img style="border-radius: 50%; width: 36px; height: 36px;"

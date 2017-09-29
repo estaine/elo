@@ -1,5 +1,7 @@
 package com.estaine.elo.entity;
 
+import java.util.List;
+import javax.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +28,9 @@ public class Player extends BaseModel {
 
     @Column
     private String imChannel;
+
+    @OneToMany(mappedBy = "player")
+    private List<Award> awards;
 
 
     public String getFullName() {

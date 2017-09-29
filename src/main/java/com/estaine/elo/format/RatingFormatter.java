@@ -15,6 +15,10 @@ public class RatingFormatter {
     private int significanceThreshold;
 
     public List<PlayerStats> formatRating(Map<Player, PlayerStats> playerStatsMap) {
+        return formatRating(playerStatsMap, this.significanceThreshold);
+    }
+
+    public List<PlayerStats> formatRating(Map<Player, PlayerStats> playerStatsMap, int significanceThreshold) {
         List<PlayerStats> sortedRatings = new LinkedList<>(playerStatsMap.values());
         sortedRatings.sort(Comparator.comparing(stats -> stats.getBaseStats().getRating()));
         Collections.reverse(sortedRatings);
@@ -27,7 +31,6 @@ public class RatingFormatter {
                 .forEach(g -> g.setGroupMatch(null)));
 
         return sortedRatings;
-
     }
 
 }

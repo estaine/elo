@@ -2,6 +2,7 @@ package com.estaine.elo.controller;
 
 import com.estaine.elo.dto.PlayerStats;
 import com.estaine.elo.format.RatingFormatter;
+import com.estaine.elo.service.AwardService;
 import com.estaine.elo.service.RatingService;
 import com.estaine.elo.service.TournamentService;
 import lombok.NonNull;
@@ -20,14 +21,16 @@ public class ApiController {
     private final RatingService ratingService;
     private final TournamentService tournamentService;
     private final RatingFormatter ratingFormatter;
+    private final AwardService awardService;
 
     @Autowired
     public ApiController(@NonNull RatingService ratingService,
-                         @NonNull TournamentService tournamentService,
-                         @NonNull RatingFormatter ratingFormatter) {
+            @NonNull TournamentService tournamentService,
+            @NonNull RatingFormatter ratingFormatter, AwardService awardService) {
         this.ratingService = ratingService;
         this.tournamentService = tournamentService;
         this.ratingFormatter = ratingFormatter;
+        this.awardService = awardService;
     }
 
     @RequestMapping("/start/group/{tournamentId}")
@@ -41,4 +44,9 @@ public class ApiController {
         return ratingFormatter.formatRating(ratingService.calculateRatings());
     }
 
+    @RequestMapping(value = "/update/awards")
+    public String updateAwards() {
+        awardService.updateAwards();
+        return "OK";
+    }
 }
