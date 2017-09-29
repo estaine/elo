@@ -14,6 +14,8 @@ public class PlayerStats {
     private List<Match> matches;
     private Integer goalsFor;
     private Integer goalsAgainst;
+    private Integer wins;
+    private Integer losses;
     private BaseStats baseStats;
     private Map<Long, Boolean> results;
     private Map<Long, Double> ratingDelta;
@@ -23,6 +25,8 @@ public class PlayerStats {
         this.matches = new ArrayList<>();
         this.goalsFor = 0;
         this.goalsAgainst = 0;
+        this.wins = 0;
+        this.losses = 0;
         this.baseStats = new BaseStats();
         this.results = new HashMap<>();
         this.ratingDelta = new HashMap<>();
@@ -47,6 +51,12 @@ public class PlayerStats {
             goalsFor += match.getYellowTeamGoals();
             goalsAgainst += match.getRedTeamGoals();
         }
+
+        if(win) {
+            wins++;
+        } else {
+            losses++;
+        }
     }
 
     public PlayerStats subtract(PlayerStats playerStats) {
@@ -57,6 +67,8 @@ public class PlayerStats {
 
         diff.goalsFor = this.goalsFor - playerStats.goalsFor;
         diff.goalsAgainst = this.goalsAgainst - playerStats.goalsAgainst;
+        diff.wins = this.wins - playerStats.wins;
+        diff.losses = this.losses - playerStats.losses;
         diff.baseStats = this.baseStats.subtract(playerStats.baseStats);
 
         this.results.forEach(diff.results::putIfAbsent);
