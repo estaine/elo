@@ -30,6 +30,10 @@ public class RatingFormatter {
         sortedRatings.forEach(r -> r.getMatches()
                 .forEach(g -> g.setGroupMatch(null)));
 
+        sortedRatings.stream()
+                .map(PlayerStats::getPlayer)
+                .forEach(p -> p.getAwards().forEach(a -> a.setPlayer(null)));
+
         return sortedRatings;
     }
 
