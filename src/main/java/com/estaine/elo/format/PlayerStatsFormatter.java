@@ -13,6 +13,7 @@ public class PlayerStatsFormatter {
         playerStats.getMatches().forEach(g -> g.setGroupMatch(null));
         Collections.reverse(playerStats.getMatches());
         playerStats.getPlayer().getAwards().sort(new AwardComparator());
+        playerStats.getPlayer().getAwards().forEach(a -> a.setPlayer(null));
         return playerStats;
     }
 
