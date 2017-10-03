@@ -14,18 +14,8 @@ public class RatingFormatter {
     @Value("${significance.threshold}")
     private int significanceThreshold;
 
-    public List<PlayerStats> formatRating(Map<Player, PlayerStats> playerStatsMap) {
-        return formatRating(playerStatsMap, this.significanceThreshold);
-    }
-
     public List<PlayerStats> formatRating(Map<Player, PlayerStats> playerStatsMap, int significanceThreshold) {
-        List<PlayerStats> sortedRatings = new LinkedList<>(playerStatsMap.values());
-        sortedRatings.sort(Comparator.comparing(stats -> stats.getBaseStats().getRating()));
-        Collections.reverse(sortedRatings);
-
-        sortedRatings = sortedRatings.stream()
-                .filter(r -> r.getBaseStats().getMatchesPlayed() >= significanceThreshold)
-                .collect(Collectors.toList());
+        List<PlayerStats> sortedRatings = sortRating(playerStatsMap, significanceThreshold);
 
         sortedRatings.forEach(r -> r.getMatches()
                 .forEach(g -> g.setGroupMatch(null)));
@@ -35,6 +25,24 @@ public class RatingFormatter {
                 .forEach(p -> p.getAwards().forEach(a -> a.setPlayer(null)));
 
         return sortedRatings;
+    }
+
+    public List<PlayerStats> sortRating(Map<Player, PlayerStats> playerStatsMap, int significanceThreshold) {
+        List<PlayerStats> sortedRatings = new LinkedList<>(playerStatsMap.values());
+        sortedRatings.sort(Comparator.comparing(stats -> stats.getBaseStats().getRating()));
+        Collections.reverse(sortedRatings);
+
+        return sortedRatings.stream()
+                .filter(r -> r.getBaseStats().getMatchesPlayed() >= significanceThreshold)
+                .collect(Collectors.toList());
+    }
+
+    public List<PlayerStats> formatRating(Map<Player, PlayerStats> playerStatsMap) {
+        return formatRating(playerStatsMap, this.significanceThreshold);
+    }
+
+    public List<PlayerStats> sortRating(Map<Player, PlayerStats> playerStatsMap) {
+        return sortRating(playerStatsMap, this.significanceThreshold);
     }
 
 }

@@ -39,7 +39,8 @@ public class DefaultAwardService implements AwardService {
 
     @Override
     public void updateAwards() {
-        awardRepository.deleteAll();
+        awardRepository.deleteByType(AwardType.WEEK_RATING_DELTA);
+        awardRepository.deleteByType(AwardType.WEEK_END_OVERALL_RATING);
 
         LocalDateTime start = matchRepository.findFirstByOrderByPlayedOnAsc().getPlayedOn();
         LocalDateTime end = matchRepository.findFirstByOrderByPlayedOnDesc().getPlayedOn();
@@ -48,16 +49,16 @@ public class DefaultAwardService implements AwardService {
 
         for (int i = 0; i < periodInWeeks; i++) {
             LocalDateTime weekStart = dateTimeUtils.getWeekStart(start).plusWeeks(i).atStartOfDay();
-            LocalDateTime weekEnd = weekStart.plusDays(6);
+            LocalDateTime weekEnd = weekStart.plusDays(7).minusSeconds(1);
 
             List<PlayerStats> weekDeltaRatings = ratingFormatter
-                    .formatRating(ratingService.calculateRatings(weekEnd, weekStart), 1);
+                    .sortRating(ratingService.calculateRatings(weekEnd, weekStart), 1);
             List<Award> weekDeltaAwards = buildWeekDeltaRatingAwards(weekDeltaRatings, weekStart, weekEnd);
             awardRepository.save(weekDeltaAwards);
 
 
             List<PlayerStats> weekEndOverallRatings = ratingFormatter
-                    .formatRating(ratingService.calculateRatings(weekEnd));
+                    .sortRating(ratingService.calculateRatings(weekEnd));
             List<Award> weekEndOverallAwards = buildWeekEndOverallRatingAwards(weekEndOverallRatings, weekEnd);
             awardRepository.save(weekEndOverallAwards);
         }

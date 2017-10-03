@@ -79,4 +79,9 @@ public class PlayerStats {
 
         return diff;
     }
+
+    @Override
+    public String toString() {
+        return player.toString() + "[" + String.format("%.2f", baseStats.getRating()) + "]";
+    }
 }
