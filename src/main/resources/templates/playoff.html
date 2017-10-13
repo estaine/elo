@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+    <title th:text="RRR">Sep'17 tournament - knockout stage</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/css/rating.css}"
+          href="../../css/rating.css"/>
+</head>
+<body>
+
+
+<div class="row justify-content-md-center">
+    <div class="col-md-9">
+        <div th:each="stageStats : ${playoffStats}">
+            <h3 th:text="${stageStats.key.name}">Semifinals</h3>
+            <table class="rwd-table">
+                <tr th:each="serie : ${stageStats.value}">
+                    <td>
+                        <img style="border-radius: 50%; width: 36px; height: 36px;"
+                             th:src="@{${'/userpics/' + serie.firstTeam.player1.username + '.png'}}"/>
+                        <img style="border-radius: 50%; width: 36px; height: 36px;"
+                             th:src="@{${'/userpics/' + serie.firstTeam.player2.username + '.png'}}"/>
+                    </td>
+                    <td>
+                        <div th:text="${'-:-'}" style="text-align: center;">5:10</div>
+                    </td>
+                    <td>
+                        <img style="border-radius: 50%; width: 36px; height: 36px;"
+                             th:src="@{${'/userpics/' + serie.secondTeam.player1.username + '.png'}}"/>
+                        <img style="border-radius: 50%; width: 36px; height: 36px;"
+                             th:src="@{${'/userpics/' + serie.secondTeam.player1.username + '.png'}}"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+</html>

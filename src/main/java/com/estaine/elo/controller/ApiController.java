@@ -39,6 +39,12 @@ public class ApiController {
         return "OK";
     }
 
+    @RequestMapping("/start/playoff/{tournamentId}")
+    public String startPlayoffStage(@PathVariable Long tournamentId) {
+        tournamentService.startPlayoffStage(tournamentId);
+        return "OK";
+    }
+
     @RequestMapping(value = {"/", "/rating"}, method = RequestMethod.GET)
     public List<PlayerStats> getRatings() {
         return ratingFormatter.formatRating(ratingService.calculateRatings());

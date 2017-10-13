@@ -10,15 +10,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class GroupStatsFormatter {
 
-    public Tournament formatTournament(Tournament tournament) {
+    public Tournament formatGroupStage(Tournament tournament) {
+        sortGroupStage(tournament);
+
+        List<Group> groups = tournament.getGroups();
+        groups.forEach(b -> b.getGroupMatches().forEach(bg -> bg.setGroup(null)));
+        groups.forEach(b -> b.getGroupMatches().stream()
+                .filter(GroupMatch::isPlayed)
+                .forEach(bg -> bg.getMatch().clearTournamentMatch()));
+
+        return tournament;
+    }
+
+    public Tournament sortGroupStage(Tournament tournament) {
         List<Group> groups = tournament.getGroups();
 
         groups.sort(Comparator.comparing(Group::getName));
         groups.forEach(b -> (b.getTeams()).sort(new GroupStandingComparator()));
-        groups.forEach(b -> b.getGroupMatches().forEach(bg -> bg.setGroup(null)));
-        groups.forEach(b -> b.getGroupMatches().stream()
-                .filter(GroupMatch::isPlayed)
-                .forEach(bg -> bg.getMatch().setGroupMatch(null)));
 
         return tournament;
     }

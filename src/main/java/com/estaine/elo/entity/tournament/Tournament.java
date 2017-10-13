@@ -1,6 +1,9 @@
 package com.estaine.elo.entity.tournament;
 
 import com.estaine.elo.entity.BaseModel;
+import java.util.LinkedHashMap;
+import javax.persistence.FetchType;
+import javax.persistence.Transient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,6 +26,12 @@ public class Tournament extends BaseModel {
 
     @OneToMany(mappedBy = "tournament")
     private List<Team> teams;
+
+    @OneToMany(mappedBy = "tournament", fetch = FetchType.EAGER)
+    private List<PlayoffSerie> playoffSeries;
+
+    @Transient
+    private LinkedHashMap<Stage, List<PlayoffSerie>> seriesByStage;
 
     @Override
     public String toString() {
