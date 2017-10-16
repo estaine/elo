@@ -8,10 +8,10 @@
 
 <div class="row justify-content-md-center">
     <div class="col-md-4">
-        <table class="rwd-table">
+        <table class="rwd-table" style="width: 468px;">
             <tr>
                 <td>
-                    <img style="border-radius: 50%; width: 72px; height: 72px;"
+                    <img style="border-radius: 50%; width: 100px; height: 100px;"
                          src="${'/userpics/' + playerStats.player.username + '.png'}"/>
                 </td>
                 <td colspan="2" style="font-size: 20pt;">
