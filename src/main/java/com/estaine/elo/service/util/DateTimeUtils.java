@@ -3,7 +3,7 @@ package com.estaine.elo.service.util;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +13,7 @@ public class DateTimeUtils {
         LocalDate matchWeekStartDay = getWeekStart(from);
         LocalDate baseWeekStartDay = getWeekStart(to);
 
-        return Period.between(matchWeekStartDay, baseWeekStartDay).getDays() / 7;
+        return (int) ChronoUnit.DAYS.between(matchWeekStartDay, baseWeekStartDay) / 7;
     }
 
     public LocalDate getWeekStart(LocalDateTime localDateTime) {
