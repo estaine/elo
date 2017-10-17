@@ -41,10 +41,10 @@ public class PlayoffSerie extends BaseModel {
     private List<PlayoffMatch> playoffMatches;
 
     @Transient
-    private Integer firstTeamWinCount;
+    private Integer firstTeamWinCount = 0;
 
     @Transient
-    private Integer secondTeamWinCount;
+    private Integer secondTeamWinCount = 0;
 
     private int bestOf;
 

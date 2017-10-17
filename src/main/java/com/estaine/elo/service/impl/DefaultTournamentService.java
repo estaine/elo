@@ -1,5 +1,6 @@
 package com.estaine.elo.service.impl;
 
+import com.estaine.elo.entity.Match;
 import com.estaine.elo.entity.tournament.Group;
 import com.estaine.elo.entity.tournament.GroupMatch;
 import com.estaine.elo.entity.tournament.PlayoffMatch;
@@ -15,14 +16,11 @@ import com.estaine.elo.service.TournamentService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DefaultTournamentService implements TournamentService {
@@ -159,6 +157,24 @@ public class DefaultTournamentService implements TournamentService {
 
         tournament.getPlayoffSeries().forEach(ps -> seriesByStage.get(ps.getStage()).add(ps));
 
+        for (PlayoffSerie playoffSerie : tournament.getPlayoffSeries()) {
+            for (PlayoffMatch playoffMatch : playoffSerie.getPlayoffMatches()) {
+                if (playoffMatch.isPlayed()) {
+                    Match match = playoffMatch.getMatch();
+
+                    Team winner = (match.getRedTeamGoals() > match.getYellowTeamGoals())
+                            ? playoffMatch.getRedTeam()
+                            : playoffMatch.getYellowTeam();
+
+                    if (winner.getId().equals(playoffSerie.getFirstTeam().getId())) {
+                        playoffSerie.setFirstTeamWinCount(playoffSerie.getFirstTeamWinCount() + 1);
+                    } else {
+                        playoffSerie.setSecondTeamWinCount(playoffSerie.getFirstTeamWinCount() + 1);
+                    }
+                }
+            }
+        }
+
         tournament.setSeriesByStage(seriesByStage);
 
         return tournament;
@@ -167,4 +183,5 @@ public class DefaultTournamentService implements TournamentService {
     private boolean isPowOfTwo(int n) {
         return (n != 0) && ((n & (n - 1)) == 0);
     }
+
 }

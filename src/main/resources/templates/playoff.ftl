@@ -26,11 +26,21 @@
                             </#if>
                         </td>
                         <td style="text-align: center;">
-                            <div style="text-align: center; font-size: 20pt;">${'2:2'}</div>
-                            <div style="text-align: center; font-size: 8pt;">10:6</div>
-                            <div style="text-align: center; font-size: 8pt;">7:10</div>
-                            <div style="text-align: center; font-size: 8pt;">10:9</div>
-                            <div style="text-align: center; font-size: 8pt;">8:10</div>
+                            <#if serie.firstTeam?? && serie.secondTeam??>
+                                <div style="text-align: center; font-size: 20pt;">${serie.firstTeamWinCount + ':' + serie.secondTeamWinCount}</div>
+                                <#list serie.playoffMatches as playoffMatch>
+                                    <#if playoffMatch.played>
+                                        <#if playoffMatch.redTeam.id == serie.firstTeam.id>
+                                            <div style="text-align: center; font-size: 8pt;">${playoffMatch.match.redTeamGoals + ':' + playoffMatch.match.yellowTeamGoals}</div>
+                                        <#else>
+                                            <div style="text-align: center; font-size: 8pt;">${playoffMatch.match.yellowTeamGoals + ':' + playoffMatch.match.redTeamGoals}</div>
+                                        </#if>
+                                    </#if>
+                                </#list>
+                            <#else>
+                                <div style="text-align: center; font-size: 20pt;">${'-:-'}</div>
+                            </#if>
+
                         </td>
                         <td style="text-align: center; vertical-align: top;">
                             <#if serie.secondTeam??>
@@ -47,7 +57,5 @@
     </#list>
     </div>
 </div>
-
-
 </body>
 </html>

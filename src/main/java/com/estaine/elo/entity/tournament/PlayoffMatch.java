@@ -38,4 +38,8 @@ public class PlayoffMatch extends BaseModel {
         this.yellowTeam = yellowTeam;
         this.playoffSerie = playoffSerie;
     }
+
+    public boolean isPlayed() {
+        return match != null;
+    }
 }
