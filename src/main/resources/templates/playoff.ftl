@@ -30,11 +30,17 @@
                                 <div style="text-align: center; font-size: 20pt;">${serie.firstTeamWinCount + ':' + serie.secondTeamWinCount}</div>
                                 <#list serie.playoffMatches as playoffMatch>
                                     <#if playoffMatch.played>
-                                        <#if playoffMatch.redTeam.id == serie.firstTeam.id>
-                                            <div style="text-align: center; font-size: 8pt;">${playoffMatch.match.redTeamGoals + ':' + playoffMatch.match.yellowTeamGoals}</div>
-                                        <#else>
-                                            <div style="text-align: center; font-size: 8pt;">${playoffMatch.match.yellowTeamGoals + ':' + playoffMatch.match.redTeamGoals}</div>
-                                        </#if>
+                                        <div style="text-align: center; font-size: 8pt;">
+                                            <#if playoffMatch.redTeam.id == serie.firstTeam.id>
+                                                <div style="width: 6px;height: 6px;border-radius: 50%;background-color: red;margin-right: 4px;display: inline-block; margin-bottom: 1px;"></div>
+                                            ${playoffMatch.match.redTeamGoals + ':' + playoffMatch.match.yellowTeamGoals}
+                                                <div style="width: 6px;height: 6px;border-radius: 50%;background-color: yellow;margin-left: 4px;display: inline-block; margin-bottom: 1px;"></div>
+                                            <#else>
+                                                <div style="width: 6px;height: 6px;border-radius: 50%;background-color: yellow;margin-right: 4px;display: inline-block; margin-bottom: 1px;"></div>
+                                            ${playoffMatch.match.yellowTeamGoals + ':' + playoffMatch.match.redTeamGoals}
+                                                <div style="width: 6px;height: 6px;border-radius: 50%;background-color: red;margin-left: 4px;display: inline-block; margin-bottom: 1px;"></div>
+                                            </#if>
+                                        </div>
                                     </#if>
                                 </#list>
                             <#else>
