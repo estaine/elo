@@ -33,27 +33,27 @@
             <tr>
                 <td></td>
                 <td>Games played</td>
-                <td>${playerStats.baseStats.matchesPlayed}</td>
+                <td>${playerStats.baseStats.matchesPlayed?c}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Games won</td>
-                <td>${playerStats.wins}</td>
+                <td>${playerStats.wins?c}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Games lost</td>
-                <td>${playerStats.losses}</td>
+                <td>${playerStats.losses?c}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Goals for</td>
-                <td>${playerStats.goalsFor}</td>
+                <td>${playerStats.goalsFor?c}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Goals against</td>
-                <td>${playerStats.goalsAgainst}</td>
+                <td>${playerStats.goalsAgainst?c}</td>
             </tr>
         </table>
     </div>
