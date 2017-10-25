@@ -1,15 +1,14 @@
 <!DOCTYPE HTML>
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
     <title>${tournament.name}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="/css/rating.css"/>
+    <#include "include/imports.ftl">
 </head>
 <body>
 
+<#include "include/header.ftl">
 
-<div class="row justify-content-md-center" style="text-align: center;">
+<div class="row justify-content-md-center" style="text-align: center; margin-top: 5em;">
     <div class="col-md-12">
     <#list tournament.seriesByStage?keys as stage>
         <div>

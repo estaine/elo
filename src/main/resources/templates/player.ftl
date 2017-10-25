@@ -2,11 +2,13 @@
 <head>
     <title>${'Player stats - ' + playerStats.player.fullName}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="/css/rating.css"/>
+    <#include "include/imports.ftl">
 </head>
 <body>
 
-<div class="row justify-content-md-center">
+<#include "include/header.ftl">
+
+<div class="row justify-content-md-center" style="margin-top: 6em;">
     <div class="col-md-4">
         <table class="rwd-table" style="width: 468px;">
             <tr>

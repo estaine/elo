@@ -2,7 +2,7 @@
 <head>
     <title>ZenSoft kicker rating</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="/css/rating.css" />
+    <#include "include/imports.ftl">
 </head>
 <body>
 
@@ -11,7 +11,9 @@
 <!--<a href="/tournament/groups">Tournament</a>-->
 <!--</div>-->
 
-<table class="rwd-table">
+<#include "include/header.ftl">
+
+<table class="rwd-table" style="margin-top: 6em;">
     <tr>
         <th>#</th>
         <th colspan="2" style="text-align: center">Player</th>

@@ -1,15 +1,16 @@
 <!DOCTYPE HTML>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
     <title>${tournament.name}</title>
-    <link rel="stylesheet" href="/css/rating.css"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <#include "include/imports.ftl">
 </head>
 <body>
-<div class="row">
+
+<#include "include/header.ftl">
+
+<div class="row" style="margin-top:6em;">
     <div class="col-md-6">
-        <table class="rwd-table" style="font-size:16pt;">
+        <table class="rwd-table" style="font-size:14pt;">
             <tr>
                 <th>#</th>
                 <th style="text-align: center;">Team</th>

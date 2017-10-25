@@ -71,7 +71,7 @@ h1 {
   overflow: hidden;
 }
 .rwd-table tr {
-  border-color: #46637f;
+  border: none;
 }
 .rwd-table th, .rwd-table td {
   margin: .5em 1em;
@@ -124,4 +124,8 @@ a:active {
   background-color: #34495E;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+.dropdown-menu>li>a {
+  color: #333 !important;
 }
