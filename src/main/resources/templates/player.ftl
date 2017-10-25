@@ -85,8 +85,8 @@
                     </a>
                 </td>
                 <td class="${playerStats.results?api.get(match.id)?then('score-win','score-lose')}">
-                    <div style="text-align: center;">${match.redTeamGoals + ' : ' + match.yellowTeamGoals}</div>
-                    <div style="text-align: center; font-size: 8pt;">${playerStats.results?api.get(match.id)?then('+ ', '– ') + playerStats.ratingDelta?api.get(match.id)?round?c}</div>
+                    <div style="text-align: center; padding-top:3px;">${match.redTeamGoals + ' : ' + match.yellowTeamGoals}</div>
+                    <div style="text-align: center; font-size: 8pt; margin-top: -2px; ">${playerStats.results?api.get(match.id)?then('+ ', '– ') + playerStats.ratingDelta?api.get(match.id)?round?c}</div>
                 </td>
                 <td>
                     <a href="${'/player/' + match.yellowTeamPlayer1.username}">
