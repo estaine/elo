@@ -94,7 +94,7 @@
 </div>
 <div class="row">
     <div class="col-md-6">
-        <table class="rwd-table">
+        <table class="rwd-table" style="font-size: 12pt;">
             <tr>
                 <th>
                     <div style="width: 12px; height: 12px; border-radius: 50%; background-color: red; margin: auto;"/>
@@ -134,7 +134,7 @@
         </table>
     </div>
     <div class="col-md-6">
-        <table class="rwd-table">
+        <table class="rwd-table" style="font-size: 12pt;">
             <tr>
                 <th>
                     <div style="width: 12px; height: 12px; border-radius: 50%; background-color: red; margin: auto;"/>
