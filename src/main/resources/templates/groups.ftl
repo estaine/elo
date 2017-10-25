@@ -2,7 +2,7 @@
 <head>
     <title>${tournament.name}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <#include "include/imports.ftl">
+<#include "include/imports.ftl">
 </head>
 <body>
 
@@ -24,10 +24,18 @@
                 <td>${team?counter}</td>
                 <td>
                     <div class="row" style="text-align: center; width: 280px;">
-                        <div class="col-md-6"><img style="border-radius: 50%; width: 44px; height: 44px;"
-                                                   src="${'/userpics/' + team.player1.username + '.png'}"/></div>
-                        <div class="col-md-6"><img style="border-radius: 50%; width: 44px; height: 44px;"
-                                                   src="${'/userpics/' + team.player2.username + '.png'}"/></div>
+                        <div class="col-md-6">
+                            <a href="${'/player/' + team.player1.username}">
+                                <img style="border-radius: 50%; width: 44px; height: 44px;"
+                                     src="${'/userpics/' + team.player1.username + '.png'}"/>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="${'/player/' + team.player2.username}">
+                                <img style="border-radius: 50%; width: 44px; height: 44px;"
+                                     src="${'/userpics/' + team.player2.username + '.png'}"/>
+                            </a>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -57,10 +65,18 @@
                 <td>${team?counter}</td>
                 <td>
                     <div class="row" style="text-align: center; width: 280px;">
-                        <div class="col-md-6"><img style="border-radius: 50%; width: 44px; height: 44px;"
-                                                   src="${'/userpics/' + team.player1.username + '.png'}"/></div>
-                        <div class="col-md-6"><img style="border-radius: 50%; width: 44px; height: 44px;"
-                                                   src="${'/userpics/' + team.player2.username + '.png'}"/></div>
+                        <div class="col-md-6">
+                            <a href="${'/player/' + team.player1.username}">
+                                <img style="border-radius: 50%; width: 44px; height: 44px;"
+                                     src="${'/userpics/' + team.player1.username + '.png'}"/>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="${'/player/' + team.player2.username}">
+                                <img style="border-radius: 50%; width: 44px; height: 44px;"
+                                     src="${'/userpics/' + team.player2.username + '.png'}"/>
+                            </a>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -91,19 +107,27 @@
         <#list tournament.groups[0].groupMatches as groupMatch>
             <tr>
                 <td style="text-align: center;">
-                    <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         src="${'/userpics/' + groupMatch.redTeam.player1.username + '.png'}"/>
-                    <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         src="${'/userpics/' + groupMatch.redTeam.player2.username + '.png'}"/>
+                    <a href="${'/player/' + groupMatch.redTeam.player1.username}">
+                        <img style="border-radius: 50%; width: 36px; height: 36px;"
+                             src="${'/userpics/' + groupMatch.redTeam.player1.username + '.png'}"/>
+                    </a>
+                    <a href="${'/player/' + groupMatch.redTeam.player2.username}">
+                        <img style="border-radius: 50%; width: 36px; height: 36px;"
+                             src="${'/userpics/' + groupMatch.redTeam.player2.username + '.png'}"/>
+                    </a>
                 </td>
                 <td style="text-align: center;">
                 ${groupMatch.played?then(groupMatch.match.redTeamGoals + ' : ' + groupMatch.match.yellowTeamGoals, '-:-')}
                 </td>
                 <td style="text-align: center;">
-                    <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         src="${'/userpics/' + groupMatch.yellowTeam.player1.username + '.png'}"/>
-                    <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         src="${'/userpics/' + groupMatch.yellowTeam.player2.username + '.png'}"/>
+                    <a href="${'/player/' + groupMatch.yellowTeam.player1.username}">
+                        <img style="border-radius: 50%; width: 36px; height: 36px;"
+                             src="${'/userpics/' + groupMatch.yellowTeam.player1.username + '.png'}"/>
+                    </a>
+                    <a href="${'/player/' + groupMatch.yellowTeam.player2.username}">
+                        <img style="border-radius: 50%; width: 36px; height: 36px;"
+                             src="${'/userpics/' + groupMatch.yellowTeam.player2.username + '.png'}"/>
+                    </a>
                 </td>
             </tr>
         </#list>
@@ -123,19 +147,27 @@
         <#list tournament.groups[1].groupMatches as groupMatch>
             <tr>
                 <td style="text-align: center;">
-                    <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         src="${'/userpics/' + groupMatch.redTeam.player1.username + '.png'}"/>
-                    <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         src="${'/userpics/' + groupMatch.redTeam.player2.username + '.png'}"/>
+                    <a href="${'/player/' + groupMatch.redTeam.player1.username}">
+                        <img style="border-radius: 50%; width: 36px; height: 36px;"
+                             src="${'/userpics/' + groupMatch.redTeam.player1.username + '.png'}"/>
+                    </a>
+                    <a href="${'/player/' + groupMatch.redTeam.player2.username}">
+                        <img style="border-radius: 50%; width: 36px; height: 36px;"
+                             src="${'/userpics/' + groupMatch.redTeam.player2.username + '.png'}"/>
+                    </a>
                 </td>
                 <td style="text-align: center;">
                 ${groupMatch.played?then(groupMatch.match.redTeamGoals + ' : ' + groupMatch.match.yellowTeamGoals, '-:-')}
                 </td>
                 <td style="text-align: center;">
-                    <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         src="${'/userpics/' + groupMatch.yellowTeam.player1.username + '.png'}"/>
-                    <img style="border-radius: 50%; width: 36px; height: 36px;"
-                         src="${'/userpics/' + groupMatch.yellowTeam.player2.username + '.png'}"/>
+                    <a href="${'/player/' + groupMatch.yellowTeam.player1.username}">
+                        <img style="border-radius: 50%; width: 36px; height: 36px;"
+                             src="${'/userpics/' + groupMatch.yellowTeam.player1.username + '.png'}"/>
+                    </a>
+                    <a href="${'/player/' + groupMatch.yellowTeam.player2.username}">
+                        <img style="border-radius: 50%; width: 36px; height: 36px;"
+                             src="${'/userpics/' + groupMatch.yellowTeam.player2.username + '.png'}"/>
+                    </a>
                 </td>
             </tr>
         </#list>

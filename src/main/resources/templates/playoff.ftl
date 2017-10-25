@@ -2,7 +2,7 @@
 <head>
     <title>${tournament.name}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <#include "include/imports.ftl">
+<#include "include/imports.ftl">
 </head>
 <body>
 
@@ -18,10 +18,14 @@
                     <tr>
                         <td style="text-align: center; vertical-align: top;">
                             <#if serie.firstTeam??>
-                                <img style="border-radius: 50%; width: 36px; height: 36px;"
-                                     src="${'/userpics/' + serie.firstTeam.player1.username + '.png'}"/>
-                                <img style="border-radius: 50%; width: 36px; height: 36px;"
-                                     src="${'/userpics/' + serie.firstTeam.player2.username + '.png'}"/>
+                                <a href="${'/player/' + serie.firstTeam.player1.username}">
+                                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                                         src="${'/userpics/' + serie.firstTeam.player1.username + '.png'}"/>
+                                </a>
+                                <a href="${'/player/' + serie.firstTeam.player2.username}">
+                                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                                         src="${'/userpics/' + serie.firstTeam.player2.username + '.png'}"/>
+                                </a>
                             </#if>
                         </td>
                         <td style="text-align: center;">
@@ -49,10 +53,14 @@
                         </td>
                         <td style="text-align: center; vertical-align: top;">
                             <#if serie.secondTeam??>
-                                <img style="border-radius: 50%; width: 36px; height: 36px;"
-                                     src="${'/userpics/' + serie.secondTeam.player1.username + '.png'}"/>
-                                <img style="border-radius: 50%; width: 36px; height: 36px;"
-                                     src="${'/userpics/' + serie.secondTeam.player2.username + '.png'}"/>
+                                <a href="${'/player/' + serie.secondTeam.player1.username}">
+                                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                                         src="${'/userpics/' + serie.secondTeam.player1.username + '.png'}"/>
+                                </a>
+                                <a href="${'/player/' + serie.secondTeam.player2.username}">
+                                    <img style="border-radius: 50%; width: 36px; height: 36px;"
+                                         src="${'/userpics/' + serie.secondTeam.player2.username + '.png'}"/>
+                                </a>
                             </#if>
                         </td>
                     </tr>

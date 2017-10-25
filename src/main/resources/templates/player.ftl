@@ -2,14 +2,14 @@
 <head>
     <title>${'Player stats - ' + playerStats.player.fullName}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <#include "include/imports.ftl">
+<#include "include/imports.ftl">
 </head>
 <body>
 
 <#include "include/header.ftl">
 
 <div class="row justify-content-md-center" style="margin-top: 6em;">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <table class="rwd-table" style="width: 468px;">
             <tr>
                 <td>
@@ -20,10 +20,10 @@
                     <div style="text-align: center">${playerStats.player.fullName}</div>
                     <div style="text-align: center">
 
-                        <#list playerStats.player.awards as award>
-                            <img src="${'/images/' + award.iconFilename}" title="${award.name}"
-                                 style="margin: 10px 5px -5px; width: 20px; height: 20px;"/>
-                        </#list>
+                    <#list playerStats.player.awards as award>
+                        <img src="${'/images/' + award.iconFilename}" title="${award.name}"
+                             style="margin: 10px 5px -5px; width: 20px; height: 20px;"/>
+                    </#list>
                     </div>
                 </td>
             </tr>
@@ -61,7 +61,7 @@
     </div>
 </div>
 <div class="row justify-content-md-center">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <table class="rwd-table">
             <tr>
                 <th>
@@ -72,26 +72,34 @@
                     <div style="width: 12px; height: 12px; border-radius: 50%; background-color: yellow; margin: auto;"/>
                 </th>
             </tr>
-            <#list playerStats.matches as match>
-                <tr>
-                    <td>
+        <#list playerStats.matches as match>
+            <tr>
+                <td>
+                    <a href="${'/player/' + match.redTeamPlayer1.username}">
                         <img style="border-radius: 50%; width: 36px; height: 36px;"
                              src="${'/userpics/' + match.redTeamPlayer1.username + '.png'}"/>
+                    </a>
+                    <a href="${'/player/' + match.redTeamPlayer2.username}">
                         <img style="border-radius: 50%; width: 36px; height: 36px;"
                              src="${'/userpics/' + match.redTeamPlayer2.username + '.png'}"/>
-                    </td>
-                    <td class="${playerStats.results?api.get(match.id)?then('score-win','score-lose')}">
-                        <div style="text-align: center;">${match.redTeamGoals + ' : ' + match.yellowTeamGoals}</div>
-                        <div style="text-align: center; font-size: 8pt;">${playerStats.results?api.get(match.id)?then('+ ', '– ') + playerStats.ratingDelta?api.get(match.id)?round?c}</div>
-                    </td>
-                    <td>
+                    </a>
+                </td>
+                <td class="${playerStats.results?api.get(match.id)?then('score-win','score-lose')}">
+                    <div style="text-align: center;">${match.redTeamGoals + ' : ' + match.yellowTeamGoals}</div>
+                    <div style="text-align: center; font-size: 8pt;">${playerStats.results?api.get(match.id)?then('+ ', '– ') + playerStats.ratingDelta?api.get(match.id)?round?c}</div>
+                </td>
+                <td>
+                    <a href="${'/player/' + match.yellowTeamPlayer1.username}">
                         <img style="border-radius: 50%; width: 36px; height: 36px;"
                              src="${'/userpics/' + match.yellowTeamPlayer1.username + '.png'}"/>
+                    </a>
+                    <a href="${'/player/' + match.yellowTeamPlayer2.username}">
                         <img style="border-radius: 50%; width: 36px; height: 36px;"
                              src="${'/userpics/' + match.yellowTeamPlayer2.username + '.png'}"/>
-                    </td>
-                </tr>
-            </#list>
+                    </a>
+                </td>
+            </tr>
+        </#list>
         </table>
     </div>
 </div>
