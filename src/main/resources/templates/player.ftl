@@ -74,7 +74,7 @@
             </tr>
         <#list playerStats.matches as match>
             <tr>
-                <td>
+                <td style="text-align: center;">
                     <a href="${'/player/' + match.redTeamPlayer1.username}">
                         <img style="border-radius: 50%; width: 36px; height: 36px;"
                              src="${'/userpics/' + match.redTeamPlayer1.username + '.png'}"/>
@@ -88,7 +88,7 @@
                     <div style="text-align: center; padding-top:3px;">${match.redTeamGoals + ' : ' + match.yellowTeamGoals}</div>
                     <div style="text-align: center; font-size: 8pt; margin-top: -2px; ">${playerStats.results?api.get(match.id)?then('+ ', '– ') + playerStats.ratingDelta?api.get(match.id)?round?c}</div>
                 </td>
-                <td>
+                <td style="text-align: center;">
                     <a href="${'/player/' + match.yellowTeamPlayer1.username}">
                         <img style="border-radius: 50%; width: 36px; height: 36px;"
                              src="${'/userpics/' + match.yellowTeamPlayer1.username + '.png'}"/>
