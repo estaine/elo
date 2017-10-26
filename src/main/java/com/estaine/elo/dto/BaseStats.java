@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class BaseStats {
 
-    private static final double INITIAL_RATING = 10_000.0;
+    public static final double INITIAL_RATING = 10_000.0;
 
     private Double rating;
     private int matchesPlayed;

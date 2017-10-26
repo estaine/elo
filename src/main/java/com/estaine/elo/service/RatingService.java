@@ -11,5 +11,5 @@ public interface RatingService {
     Map<Player, PlayerStats> calculateRatings();
     Map<Player, PlayerStats> calculateRatings(LocalDateTime base);
     Map<Player, PlayerStats> calculateRatings(LocalDateTime base, LocalDateTime start);
-
+    PlayerStats calculateRecords(PlayerStats playerStats);
 }

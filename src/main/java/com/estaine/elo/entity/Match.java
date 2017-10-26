@@ -65,6 +65,18 @@ public class Match extends BaseModel {
         playoffMatch = null;
     }
 
+    public boolean isWonBy(Player player) {
+        if(!getAllParticipants().contains(player)) {
+            throw new IllegalArgumentException("Player " + player.getUsername() + " is not a participant of match " + this.getId());
+        }
+
+        boolean redWon = redTeamGoals > yellowTeamGoals;
+        Long playerId = player.getId();
+        boolean playerIsRed = playerId.equals(redTeamPlayer1.getId()) || playerId.equals(redTeamPlayer2.getId());
+
+        return redWon == playerIsRed;
+    }
+
     @Override
     public String toString() {
         return redTeamPlayer1.getUsername() + " & " + redTeamPlayer2.getUsername()

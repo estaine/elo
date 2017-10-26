@@ -17,6 +17,8 @@ public class PlayerStats {
     private Integer wins;
     private Integer losses;
     private BaseStats baseStats;
+    private PersonalBests personalBests;
+    private PartnerStats bestPartner;
     private Map<Long, Boolean> results;
     private Map<Long, Double> ratingDelta;
 
@@ -28,6 +30,8 @@ public class PlayerStats {
         this.wins = 0;
         this.losses = 0;
         this.baseStats = new BaseStats();
+        this.personalBests = new PersonalBests();
+        this.bestPartner = new PartnerStats();
         this.results = new HashMap<>();
         this.ratingDelta = new HashMap<>();
     }
