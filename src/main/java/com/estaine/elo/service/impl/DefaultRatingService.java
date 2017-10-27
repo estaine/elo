@@ -36,6 +36,7 @@ public class DefaultRatingService implements RatingService {
     private static final double SKILL_CORRECTION_DEGREE = 0.2;
 
     private static final int WEEKS_RATED = 10;
+    private static final int MIN_RANKABLE_PARTICIPANTS_COUNT = 12;
 
     @Value("${significance.threshold}")
     private int significanceThreshold;
@@ -146,11 +147,13 @@ public class DefaultRatingService implements RatingService {
 
                 List<PlayerStats> sortedResults = ratingFormatter.sortRating(statsMap);
 
-                for (int i = 0; i < sortedResults.size(); i++) {
-                    PlayerStats stats = sortedResults.get(i);
-                    if (stats.getPlayer().getId().equals(player.getId())) {
-                        currentRank = new RankRecord(i + 1, sortedResults.size(), match.getPlayedOn());
-                        break;
+                if(sortedResults.size() >= MIN_RANKABLE_PARTICIPANTS_COUNT) {
+                    for (int i = 0; i < sortedResults.size(); i++) {
+                        PlayerStats stats = sortedResults.get(i);
+                        if (stats.getPlayer().getId().equals(player.getId())) {
+                            currentRank = new RankRecord(i + 1, sortedResults.size(), match.getPlayedOn());
+                            break;
+                        }
                     }
                 }
 
