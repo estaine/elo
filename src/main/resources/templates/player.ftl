@@ -57,6 +57,60 @@
                 <td>Goals against</td>
                 <td>${playerStats.goalsAgainst?c}</td>
             </tr>
+        <#if playerStats.personalBests??>
+            <tr class="personal-best" style="border-top: 1px solid #ddd;">
+                <td></td>
+                <td>Highest rating</td>
+                <td>
+                    <div>${playerStats.personalBests.highestRating.value?round?c}</div>
+                    <div style="font-size: 8pt; margin-top: -3px; ">${playerStats.personalBests.highestRating.formattedDate}</div>
+                </td>
+            </tr>
+            <tr class="personal-best">
+                <td></td>
+                <td>Lowest rating</td>
+                <td>
+                    <div>${playerStats.personalBests.lowestRating.value?round?c}</div>
+                    <div style="font-size: 8pt; margin-top: -3px; ">${playerStats.personalBests.lowestRating.formattedDate}</div>
+                </td>
+            </tr>
+            <tr class="personal-best">
+                <td></td>
+                <td>Highest rank</td>
+                <td>
+                    <div>${playerStats.personalBests.highestRank.rank + ' of ' + playerStats.personalBests.highestRank.totalParticipants}</div>
+                    <div style="font-size: 8pt; margin-top: -3px; ">${playerStats.personalBests.highestRank.formattedDate}</div>
+                </td>
+            </tr>
+            <tr class="personal-best">
+                <td></td>
+                <td>Lowest rank</td>
+                <td>
+                    <div>${playerStats.personalBests.lowestRank.rank + ' of ' + playerStats.personalBests.lowestRank.totalParticipants}</div>
+                    <div style="font-size: 8pt; margin-top: -3px; ">${playerStats.personalBests.lowestRank.formattedDate}</div>
+                </td>
+            </tr>
+            <tr class="personal-best">
+                <td></td>
+                <td>Longest win streak</td>
+                <td>
+                    <div>${playerStats.personalBests.longestWinStreak.length}</div>
+                    <div style="font-size: 8pt; margin-top: -3px; ">
+                    ${playerStats.personalBests.longestWinStreak.formattedStart + ' - ' + playerStats.personalBests.longestWinStreak.formattedEnd}
+                    </div>
+                </td>
+            </tr>
+            <tr class="personal-best">
+                <td></td>
+                <td>Longest loss streak</td>
+                <td>
+                    <div>${playerStats.personalBests.longestLossStreak.length}</div>
+                    <div style="font-size: 8pt; margin-top: -3px; ">
+                    ${playerStats.personalBests.longestLossStreak.formattedStart + ' - ' + playerStats.personalBests.longestLossStreak.formattedEnd}
+                    </div>
+                </td>
+            </tr>
+        </#if>
         </table>
     </div>
 </div>

@@ -129,3 +129,9 @@ a:active {
 .dropdown-menu>li>a {
   color: #333 !important;
 }
+
+tr.personal-best > td{
+    padding-top: 0.5em !important;
+    padding-bottom: 0.5em !important;
+    vertical-align: top;
+}

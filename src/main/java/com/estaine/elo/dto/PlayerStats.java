@@ -30,8 +30,6 @@ public class PlayerStats {
         this.wins = 0;
         this.losses = 0;
         this.baseStats = new BaseStats();
-        this.personalBests = new PersonalBests();
-        this.bestPartner = new PartnerStats();
         this.results = new HashMap<>();
         this.ratingDelta = new HashMap<>();
     }

@@ -9,7 +9,7 @@ public class PersonalBests {
     private RankRecord highestRank;
     private RankRecord lowestRank;
     private Streak longestWinStreak;
-    private Streak longestLoseStreak;
+    private Streak longestLossStreak;
 
     public PersonalBests() {
         this.highestRating = new RatingRecord();
@@ -17,6 +17,6 @@ public class PersonalBests {
         this.highestRank = new RankRecord();
         this.lowestRank = new RankRecord();
         this.longestWinStreak = new Streak();
-        this.longestLoseStreak = new Streak();
+        this.longestLossStreak = new Streak();
     }
 }

@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class Streak {
 
-    private static final String DATE_TIME_FORMAT = "dd-MMM-yyyy";
+    private static final String DATE_FORMAT = "dd.MM.yyyy";
 
     private Match start;
     private Match end;
@@ -21,16 +21,20 @@ public class Streak {
         length++;
     }
 
-    public void reset() {
-        length = 0;
+    public String getFormattedStart() {
+        return start.getPlayedOn().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+    }
+
+    public String getFormattedEnd() {
+        return end.getPlayedOn().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
     }
 
     @Override
     public String toString() {
         return length
                 + " matches, "
-                + start.getPlayedOn().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT))
+                + start.getPlayedOn().format(DateTimeFormatter.ofPattern(DATE_FORMAT))
                 + " - "
-                + end.getPlayedOn().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
+                + end.getPlayedOn().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
     }
 }

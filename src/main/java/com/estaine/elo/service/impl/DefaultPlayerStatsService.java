@@ -1,5 +1,6 @@
 package com.estaine.elo.service.impl;
 
+import com.estaine.elo.dto.PersonalBests;
 import com.estaine.elo.dto.PlayerStats;
 import com.estaine.elo.dto.Streak;
 import com.estaine.elo.entity.Match;
@@ -12,10 +13,14 @@ import java.util.List;
 import lombok.NonNull;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DefaultPlayerStatsService implements PlayerStatsService {
+
+    @Value("${significance.threshold}")
+    private int significanceThreshold;
 
     private final PlayerRepository playerRepository;
     private final MatchRepository matchRepository;
@@ -37,10 +42,14 @@ public class DefaultPlayerStatsService implements PlayerStatsService {
         Hibernate.initialize(playerStats.getPlayer().getAwards());
 
         List<Match> playerMatches = matchRepository.findAllByPlayer(player);
-        playerStats.getPersonalBests().setLongestWinStreak(calculateLongestStreak(player, playerMatches, true));
-        playerStats.getPersonalBests().setLongestLoseStreak(calculateLongestStreak(player, playerMatches, false));
 
-        playerStats = ratingService.calculateRecords(playerStats);
+        if(playerMatches.size() >= significanceThreshold) {
+            playerStats.setPersonalBests(new PersonalBests());
+            playerStats.getPersonalBests().setLongestWinStreak(calculateLongestStreak(player, playerMatches, true));
+            playerStats.getPersonalBests().setLongestLossStreak(calculateLongestStreak(player, playerMatches, false));
+
+            playerStats = ratingService.calculateRecords(playerStats);
+        }
 
         return playerStats;
     }
@@ -59,11 +68,16 @@ public class DefaultPlayerStatsService implements PlayerStatsService {
                 streak.increment();
             } else if ((i > 0) && (matches.get(i - 1).isWonBy(player) == result)) {
                 streak.setEnd(matches.get(i - 1));
-                if(streak.getLength() >= longestStreak.getLength()) {
+                if (streak.getLength() >= longestStreak.getLength()) {
                     longestStreak = streak;
                 }
                 streak = new Streak();
             }
+        }
+
+        if (streak.getLength() >= longestStreak.getLength()) {
+            streak.setEnd(matches.get(matches.size() - 1));
+            longestStreak = streak;
         }
 
         return longestStreak;

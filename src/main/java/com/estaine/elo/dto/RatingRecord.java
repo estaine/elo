@@ -1,12 +1,16 @@
 package com.estaine.elo.dto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class RatingRecord implements Comparable<RatingRecord> {
+public class RatingRecord {
+
+    private static final String DATE_FORMAT = "dd.MM.yyyy";
+
     private Double value;
     private LocalDateTime date;
 
@@ -14,11 +18,7 @@ public class RatingRecord implements Comparable<RatingRecord> {
         value = BaseStats.INITIAL_RATING;
     }
 
-    @Override
-    public int compareTo(RatingRecord ratingRecord) {
-        if(this.value.equals(ratingRecord.value)) {
-            return ratingRecord.date.compareTo(this.date);
-        }
-        return this.value.compareTo(ratingRecord.value);
+    public String getFormattedDate() {
+        return date.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
     }
 }
