@@ -58,7 +58,7 @@ public class DefaultAwardService implements AwardService {
 
 
             List<PlayerStats> weekEndOverallRatings = ratingFormatter
-                    .sortRating(ratingService.calculateRatings(weekEnd));
+                    .sortRating(ratingService.calculateRatings(weekEnd), 1);
             List<Award> weekEndOverallAwards = buildWeekEndOverallRatingAwards(weekEndOverallRatings, weekEnd);
             awardRepository.save(weekEndOverallAwards);
         }
