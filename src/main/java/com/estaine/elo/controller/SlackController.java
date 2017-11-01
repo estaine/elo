@@ -24,7 +24,7 @@ public class SlackController {
     public String registerMatch(@RequestParam String token, @RequestParam("channel_name") String channelName,
             @RequestParam("user_name") String userName, @RequestParam String text) {
 
-        System.out.println("Slack /match request received from @" + userName);
+        System.out.println("Slack /match request received from @" + userName + ": " + text);
         return matchService.registerMatch(userName, channelName, text, token);
     }
 
