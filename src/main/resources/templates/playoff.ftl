@@ -16,7 +16,7 @@
             <table class="rwd-table">
                 <#list tournament.seriesByStage?api.get(stage) as serie>
                     <tr>
-                        <td style="text-align: center; vertical-align: top;">
+                        <td style="text-align: center; vertical-align: top; width: 110px;">
                             <#if serie.firstTeam??>
                                 <a href="${'/player/' + serie.firstTeam.player1.username}">
                                     <img style="border-radius: 50%; width: 36px; height: 36px;"
@@ -51,7 +51,7 @@
                             </#if>
 
                         </td>
-                        <td style="text-align: center; vertical-align: top;">
+                        <td style="text-align: center; vertical-align: top; width: 110px;">
                             <#if serie.secondTeam??>
                                 <a href="${'/player/' + serie.secondTeam.player1.username}">
                                     <img style="border-radius: 50%; width: 36px; height: 36px;"
