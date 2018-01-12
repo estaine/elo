@@ -11,13 +11,19 @@ public class BaseStats {
 
     private Double rating;
     private int matchesPlayed;
+    private int matchesRated;
 
     public BaseStats() {
         this.rating = INITIAL_RATING;
         matchesPlayed = 0;
+        matchesRated = 0;
     }
 
     public void updateRating(double rating) {
+        if(!this.rating.equals(rating)) {
+            matchesRated++;
+        }
+
         this.rating = rating;
         matchesPlayed++;
     }

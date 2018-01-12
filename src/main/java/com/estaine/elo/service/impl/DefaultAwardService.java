@@ -15,18 +15,23 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DefaultAwardService implements AwardService {
 
     private final static String DATE_FORMAT = "dd-MMM-yyyy";
+    private final static int MIN_PLAYERS_RATEABLE = 3;
 
     private final MatchRepository matchRepository;
     private final RatingService ratingService;
     private final DateTimeUtils dateTimeUtils;
     private final AwardRepository awardRepository;
     private final RatingFormatter ratingFormatter;
+
+    @Value("${significance.threshold}")
+    private int significanceThreshold;
 
     @Autowired
     public DefaultAwardService(MatchRepository matchRepository, RatingService ratingService, DateTimeUtils dateTimeUtils, AwardRepository awardRepository, RatingFormatter ratingFormatter) {
@@ -53,12 +58,20 @@ public class DefaultAwardService implements AwardService {
 
             List<PlayerStats> weekDeltaRatings = ratingFormatter
                     .sortRating(ratingService.calculateRatings(weekEnd, weekStart), 1);
-            List<Award> weekDeltaAwards = buildWeekDeltaRatingAwards(weekDeltaRatings, weekStart, weekEnd);
-            awardRepository.save(weekDeltaAwards);
 
+            if(weekDeltaRatings.size() >= MIN_PLAYERS_RATEABLE) {
+                List<Award> weekDeltaAwards = buildWeekDeltaRatingAwards(weekDeltaRatings, weekStart, weekEnd);
+                awardRepository.save(weekDeltaAwards);
+            }
 
             List<PlayerStats> weekEndOverallRatings = ratingFormatter
-                    .sortRating(ratingService.calculateRatings(weekEnd), 1);
+                    .sortRating(ratingService.calculateRatings(weekEnd), significanceThreshold);
+
+            if(weekEndOverallRatings.size() < MIN_PLAYERS_RATEABLE) {
+                weekEndOverallRatings = ratingFormatter
+                        .sortRating(ratingService.calculateRatings(weekEnd), 1);
+            }
+
             List<Award> weekEndOverallAwards = buildWeekEndOverallRatingAwards(weekEndOverallRatings, weekEnd);
             awardRepository.save(weekEndOverallAwards);
         }

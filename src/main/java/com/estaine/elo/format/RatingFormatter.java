@@ -18,6 +18,10 @@ public class RatingFormatter {
     public List<PlayerStats> formatRating(Map<Player, PlayerStats> playerStatsMap, int significanceThreshold) {
         List<PlayerStats> sortedRatings = sortRating(playerStatsMap, significanceThreshold);
 
+        sortedRatings = sortedRatings.stream()
+                .filter(r -> r.getBaseStats().getMatchesRated() >= significanceThreshold)
+                .collect(Collectors.toList());
+
         sortedRatings.forEach(r -> r.getMatches()
                 .forEach(Match::clearTournamentMatch));
 

@@ -18,6 +18,7 @@
         <th>#</th>
         <th colspan="2" style="text-align: center">Player</th>
         <th style="text-align: center">Games</th>
+        <th style="text-align: center">Rated</th>
         <th style="text-align: center">Rating</th>
     </tr>
 <#list ratings as playerStats>
@@ -31,6 +32,7 @@
         </td>
         <td><a href="${'/player/' + playerStats.player.username}">${playerStats.player.fullName}</a></td>
         <td>${playerStats.baseStats.matchesPlayed}</td>
+        <td>${playerStats.baseStats.matchesRated}</td>
         <td>${playerStats.baseStats.rating?round?c}</td>
     </tr>
 </#list>
