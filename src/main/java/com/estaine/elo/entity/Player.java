@@ -29,6 +29,9 @@ public class Player extends BaseModel {
     @Column
     private String imChannel;
 
+    @Column
+    private Boolean active;
+
     @OneToMany(mappedBy = "player")
     private List<Award> awards;
 

@@ -1,5 +1,7 @@
 package com.estaine.elo.controller;
 
+import com.estaine.elo.dto.PlayerStats;
+import com.estaine.elo.entity.Player;
 import com.estaine.elo.format.GroupStatsFormatter;
 import com.estaine.elo.format.PlayerStatsFormatter;
 import com.estaine.elo.format.PlayoffStatsFormatter;
@@ -7,6 +9,7 @@ import com.estaine.elo.format.RatingFormatter;
 import com.estaine.elo.service.PlayerStatsService;
 import com.estaine.elo.service.RatingService;
 import com.estaine.elo.service.TournamentService;
+import java.util.Map;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,7 +47,9 @@ public class WebController {
 
     @RequestMapping(value = {"/", "/rating"}, method = RequestMethod.GET)
     public String getRatings(Model model) {
-        model.addAttribute("ratings", ratingFormatter.formatRating(ratingService.calculateRatings()));
+        Map<Player, PlayerStats> ratings = ratingService.calculateRatings();
+        model.addAttribute("ratings", ratingFormatter.formatRating(ratings));
+        model.addAttribute("inactiveRatings", ratingFormatter.getInactiveRatings(ratings));
         return "rating";
     }
 

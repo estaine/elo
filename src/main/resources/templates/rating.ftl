@@ -36,6 +36,25 @@
         <td>${playerStats.baseStats.rating?round?c}</td>
     </tr>
 </#list>
+<#list inactiveRatings as playerStats>
+    <#if playerStats?is_first>
+        <tr style="border-top: 1px solid #eee;">
+    <#else>
+        <tr>
+    </#if>
+        <td></td>
+        <td>
+            <a href="${'/player/' + playerStats.player.username}">
+                <img style="border-radius: 50%; width: 28px; height: 28px;"
+                     src="${'/userpics/' + playerStats.player.username + '.png'}"/>
+            </a>
+        </td>
+        <td><a href="${'/player/' + playerStats.player.username}">${playerStats.player.fullName}</a></td>
+        <td>${playerStats.baseStats.matchesPlayed}</td>
+        <td>${playerStats.baseStats.matchesRated}</td>
+        <td></td>
+    </tr>
+</#list>
 </table>
 
 </body>

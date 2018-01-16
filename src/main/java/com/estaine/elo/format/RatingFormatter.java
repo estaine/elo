@@ -50,4 +50,28 @@ public class RatingFormatter {
         return sortRating(playerStatsMap, this.significanceThreshold);
     }
 
+    public List<PlayerStats> getInactiveRatings(Map<Player, PlayerStats> playerStatsMap) {
+        List<PlayerStats> sortedRatings = sortInactiveRatings(playerStatsMap);
+
+        sortedRatings.forEach(r -> r.getMatches()
+                .forEach(Match::clearTournamentMatch));
+
+        sortedRatings.stream()
+                .map(PlayerStats::getPlayer)
+                .forEach(p -> p.getAwards().forEach(a -> a.setPlayer(null)));
+
+        return sortedRatings;
+
+    }
+
+    private List<PlayerStats> sortInactiveRatings(Map<Player, PlayerStats> playerStatsMap) {
+        List<PlayerStats> sortedRatings = new LinkedList<>(playerStatsMap.values());
+        sortedRatings.sort(Comparator.comparing(stats -> stats.getBaseStats().getMatchesRated()));
+        Collections.reverse(sortedRatings);
+
+        return sortedRatings.stream()
+                .filter(r -> (r.getBaseStats().getMatchesRated() < significanceThreshold) && r.getPlayer().getActive())
+                .collect(Collectors.toList());
+    }
+
 }
