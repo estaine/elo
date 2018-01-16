@@ -21,15 +21,15 @@ public class PlayerStatsFormatter {
     public static class AwardComparator implements Comparator<Award> {
         @Override
         public int compare(Award a1, Award a2) {
-            if(a1.getLevel() == a2.getLevel()) {
-                if(a1.getType() == a2.getType()) {
+            if(a1.getType() == a2.getType()) {
+                if(a1.getLevel() == a2.getLevel()) {
                     return Integer.compare(a1.getId().intValue(), a2.getId().intValue());
                 }
                 else {
-                    return Integer.compare(a1.getType().ordinal(), a2.getType().ordinal());
+                    return Integer.compare(a1.getLevel().ordinal(), a2.getLevel().ordinal());
                 }
             } else {
-                return Integer.compare(a1.getLevel().ordinal(), a2.getLevel().ordinal());
+                return Integer.compare(a1.getType().ordinal(), a2.getType().ordinal());
             }
         }
     }
