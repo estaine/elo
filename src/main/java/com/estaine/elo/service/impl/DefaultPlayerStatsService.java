@@ -1,5 +1,10 @@
 package com.estaine.elo.service.impl;
 
+import com.estaine.elo.dto.EphemeralTeam;
+import com.estaine.elo.dto.EphemeralTeamStats;
+import com.estaine.elo.dto.PartnerStats;
+import com.estaine.elo.dto.PartnerStats.PartnerStatsPopularityComparator;
+import com.estaine.elo.dto.PartnerStats.PartnerStatsWinRateComparator;
 import com.estaine.elo.dto.PersonalBests;
 import com.estaine.elo.dto.PlayerStats;
 import com.estaine.elo.dto.Streak;
@@ -9,7 +14,11 @@ import com.estaine.elo.repository.MatchRepository;
 import com.estaine.elo.repository.PlayerRepository;
 import com.estaine.elo.service.PlayerStatsService;
 import com.estaine.elo.service.RatingService;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.NonNull;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +30,8 @@ public class DefaultPlayerStatsService implements PlayerStatsService {
 
     @Value("${significance.threshold}")
     private int significanceThreshold;
+
+    private final static int PARTNER_THRESHOLD = 10;
 
     private final PlayerRepository playerRepository;
     private final MatchRepository matchRepository;
@@ -50,6 +61,15 @@ public class DefaultPlayerStatsService implements PlayerStatsService {
 
             playerStats = ratingService.calculateRecords(playerStats);
         }
+
+        List<PartnerStats> allPartnerStats = getPartnerStats(player, playerMatches);
+
+        allPartnerStats.sort(new PartnerStatsWinRateComparator());
+        playerStats.setBestPercentagePartner(allPartnerStats.get(0));
+        playerStats.setWorstPercentagePartner(allPartnerStats.get(allPartnerStats.size() - 1));
+
+        allPartnerStats.sort(new PartnerStatsPopularityComparator());
+        playerStats.setFavouritePartner(allPartnerStats.get(0));
 
         return playerStats;
     }
@@ -81,6 +101,39 @@ public class DefaultPlayerStatsService implements PlayerStatsService {
         }
 
         return longestStreak;
+    }
+
+    private List<PartnerStats> getPartnerStats(Player player, List<Match> matches) {
+        Map<EphemeralTeam, EphemeralTeamStats> statsByTeam = new HashMap<>();
+
+        for(Match match : matches) {
+            EphemeralTeam team = match.playedForRed(player)
+                    ? new EphemeralTeam(match.getRedTeamPlayer1(), match.getRedTeamPlayer2())
+                    : new EphemeralTeam(match.getYellowTeamPlayer1(), match.getYellowTeamPlayer2());
+
+            boolean won = match.isWonBy(player);
+
+            if(statsByTeam.containsKey(team)) {
+                statsByTeam.get(team).addResult(won);
+            } else {
+                statsByTeam.put(team, new EphemeralTeamStats(won));
+            }
+        }
+
+        List<PartnerStats> allPartnerStats = new ArrayList<>();
+
+        for(Map.Entry<EphemeralTeam, EphemeralTeamStats> statsEntry : statsByTeam.entrySet()) {
+            allPartnerStats.add(new PartnerStats(statsEntry.getKey(), player, statsEntry.getValue()));
+        }
+
+        if(allPartnerStats.stream()
+                .anyMatch(s -> s.getMatchesTogether() >= PARTNER_THRESHOLD)) {
+            return allPartnerStats.stream()
+                    .filter(s -> s.getMatchesTogether() >= PARTNER_THRESHOLD)
+                    .collect(Collectors.toList());
+        }
+
+        return allPartnerStats;
     }
 
 }

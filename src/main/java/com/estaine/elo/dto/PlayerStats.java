@@ -18,7 +18,9 @@ public class PlayerStats {
     private Integer losses;
     private BaseStats baseStats;
     private PersonalBests personalBests;
-    private PartnerStats bestPartner;
+    private PartnerStats favouritePartner;
+    private PartnerStats bestPercentagePartner;
+    private PartnerStats worstPercentagePartner;
     private Map<Long, Boolean> results;
     private Map<Long, Double> ratingDelta;
 

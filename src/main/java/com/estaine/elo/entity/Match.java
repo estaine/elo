@@ -77,6 +77,18 @@ public class Match extends BaseModel {
         return redWon == playerIsRed;
     }
 
+    public boolean playedForRed(Player player) throws IllegalArgumentException {
+        if(player.equals(redTeamPlayer1) || player.equals(redTeamPlayer2)) {
+            return true;
+        }
+
+        if(player.equals(yellowTeamPlayer1) || player.equals(yellowTeamPlayer2)) {
+            return false;
+        }
+
+        throw new IllegalArgumentException("Player " + player.getUsername() + " is not a participant of match " + this.getId());
+    }
+
     @Override
     public String toString() {
         return redTeamPlayer1.getUsername() + " & " + redTeamPlayer2.getUsername()
